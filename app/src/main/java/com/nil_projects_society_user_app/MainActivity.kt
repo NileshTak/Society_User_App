@@ -1,67 +1,96 @@
 package com.nil_projects_society_user_app
 
+import android.Manifest
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
+import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.OnItemLongClickListener
-import com.xwray.groupie.ViewHolder
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.onesignal.OneSignal
+import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_edit_prof.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
-import org.w3c.dom.Text
+import kotlinx.android.synthetic.main.content_main.*
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
     lateinit var mAuth : FirebaseAuth
+    var LoggedIn_User_phone: String? = null
+    lateinit var waitReq : ImageView
+    lateinit var btnLogout : Button
+    lateinit var tvNavTitle : TextView
+    lateinit var ciNavProfImg : CircleImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        btnLogout = findViewById<Button>(R.id.btnLogout)
+        tvNavTitle = findViewById<TextView>(R.id.tvnavTitle)
+        ciNavProfImg = findViewById<CircleImageView>(R.id.navProfImg)
+        waitReq = findViewById<ImageView>(R.id.imgWait)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
         mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
 
-        if (mAuth.currentUser == null) {
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+            .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+            .unsubscribeWhenNotificationsAreDisabled(true)
+            .init()
+
+
+        if (user != null) {
+            LoggedIn_User_phone = user!!.phoneNumber
+            disableNav()
+            OneSignal.sendTag("NotificationID", LoggedIn_User_phone)
+        }else{
             startActivity(Intent(this, SignUp_Mobile::class.java))
         }
 
-        fetchUserDataNAV()
+        btnLogout.setOnClickListener {
+                mAuth.signOut()
+            OneSignal.setSubscription(false)
+                startActivity(Intent(this, SignUp_Mobile ::class.java))
+                Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
+        }
+
+        askImpPermission()
 
         supportFragmentManager.beginTransaction().replace(R.id.frame_container,HomeFrag()).commit()
-        supportActionBar!!.title = "Home"
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Home"
 
-        val log_out = findViewById<com.getbase.floatingactionbutton.FloatingActionButton>(R.id.log_out)
-        log_out.setOnClickListener {
-            mAuth.signOut()
-            startActivity(Intent(this, SignUp_Mobile ::class.java))
-            Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
-        }
+//        val log_out = findViewById<com.getbase.floatingactionbutton.FloatingActionButton>(R.id.log_out)
+//        log_out.setOnClickListener {
+//            mAuth.signOut()
+//            startActivity(Intent(this, SignUp_Mobile ::class.java))
+//            Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
+//        }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val holder = findViewById<LinearLayout>(R.id.holder)
@@ -100,32 +129,97 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
     }
 
+    private fun askImpPermission() {
+        askPermission(
+            Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
+            , Manifest.permission.ACCESS_NETWORK_STATE){
+
+        }.onDeclined { e ->
+            if (e.hasDenied()) {
+                //the list of denied permissions
+                e.denied.forEach {
+                }
+
+                AlertDialog.Builder(this@MainActivity)
+                    .setMessage("Please accept our permissions.. Otherwise you will not be able to use some of our Important Features.")
+                    .setPositiveButton("yes") { dialog, which ->
+                        e.askAgain()
+                    } //ask again
+                    .setNegativeButton("no") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+
+            if (e.hasForeverDenied()) {
+                //the list of forever denied permissions, user has check 'never ask again'
+                e.foreverDenied.forEach {
+                }
+                // you need to open setting manually if you really need it
+                e.goToSettings()
+            }
+        }
+    }
+
+    private fun disableNav() {
+
+        var db = FirebaseFirestore.getInstance()
+        var mob = mAuth.currentUser?.phoneNumber
+        db.collection("FlatUsers")
+            .whereEqualTo("MobileNumber", mob)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val city = documentSnapshot.toObjects(UserClassFireStore :: class.java)
+                for (document in city) {
+                    if(document!!.userAuth.equals("Pending") || document.userAuth.equals("Rejected"))
+                    {
+                        frame_container.visibility = View.GONE
+                        waitReq.visibility = View.VISIBLE
+                        Glide.with(this@MainActivity).load(document.Profile_Pic_url).into(ciNavProfImg)
+                        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                        disableNav()
+                    }
+                    else{
+                        frame_container.visibility = View.VISIBLE
+                        waitReq.visibility = View.GONE
+                        Glide.with(this@MainActivity).load(document.Profile_Pic_url).into(ciNavProfImg)
+                        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                        disableNav()
+                        fetchUserDataNAV()
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("SocietyFirestore", "Error getting documents.", exception)
+            }
+    }
+
+
+
     private fun fetchUserDataNAV() {
         var navigationView = findViewById<NavigationView>(R.id.nav_view)
         var headerView = navigationView.getHeaderView(0)
         var navUsername = headerView.findViewById<TextView>(R.id.name_user_nav)
         var navUseremail = headerView.findViewById<TextView>(R.id.email_user_nav)
+        var navProfPic = headerView.findViewById<CircleImageView>(R.id.profpic_user_nav)
 
-        mAuth = FirebaseAuth.getInstance()
-
-        var userid = mAuth.currentUser?.uid
-
-        val refUser = FirebaseDatabase.getInstance().getReference("/Users/$userid")
-
-        refUser.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                var userdata = p0.getValue(UserSocietyClass :: class.java)
-                if(userdata != null)
-                {
-                    navUsername.text = userdata.name
-                    navUseremail.text = userdata.email
-                }
-            }
-        })
+        if(FirebaseAuth.getInstance().currentUser!!.uid.isNotEmpty())
+        {
+            val userId = FirebaseAuth.getInstance().currentUser!!.uid
+            val db = FirebaseFirestore.getInstance()
+            val Ref = db.collection("FlatUsers")
+            Ref.whereEqualTo("UserID", userId)
+                .get()
+                .addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
+                    for (documentSnapshot in queryDocumentSnapshots) {
+                        val note = documentSnapshot.toObject<UserSocietyClass>(UserSocietyClass::class.java)
+                      //  Picasso.get().load(note.Profile_Pic_url).into(navProfPic)
+                        Glide.with(this).load(note.Profile_Pic_url).into(navProfPic)
+                        navUseremail.text = note.UserEmail
+                        navUsername.text = note.UserName
+                    }
+                })
+        }
     }
 
 override fun onBackPressed() {
@@ -137,24 +231,25 @@ override fun onBackPressed() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.profile_option, menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
-
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId)
+        {
+            R.id.view_prof ->
+            {
+                var int = Intent(this,EditProf :: class.java)
+                startActivity(int)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
@@ -168,18 +263,15 @@ override fun onBackPressed() {
             R.id.nav_reports -> {
                 loadReportFrag(fragReport = ReportFrag())
             }
-//            R.id.nav_profile -> {
-//
-//            }
-//            R.id.nav_complaints -> {
-//
-//            }
+            R.id.nav_complaints -> {
+                loadComplaintFrag(fragComplaint = ComplaintsFrag())
+            }
             R.id.nav_notification -> {
                 loadNotificationFrag(fragNoti = NotificationFrag())
             }
-//            R.id.nav_parking -> {
-//
-//            }
+            R.id.nav_maintainance -> {
+                loadMaintainanceRecordFrag(fragMaintain = Maintainance_Records())
+            }
             R.id.nav_workers -> {
                 loadWorkersFrag(fragWorkers = WorkersFrag())
             }
@@ -190,10 +282,19 @@ override fun onBackPressed() {
         return true
     }
 
+    fun loadMaintainanceRecordFrag(fragMaintain: Maintainance_Records)
+    {
+        val fm = supportFragmentManager.beginTransaction()
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Maintainance Records"
+        fm.replace(R.id.frame_container,fragMaintain)
+        fm.commit()
+    }
+
     fun loadHomeFrag(fragHome : HomeFrag)
     {
         val fm = supportFragmentManager.beginTransaction()
-        supportActionBar!!.title = "Home"
+        tvNavTitle.text = "Home"
         fm.replace(R.id.frame_container,fragHome)
         fm.commit()
     }
@@ -201,15 +302,26 @@ override fun onBackPressed() {
     fun loadReportFrag(fragReport : ReportFrag)
     {
         val fm = supportFragmentManager.beginTransaction()
-        supportActionBar!!.title = "Reports"
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Building Notice"
         fm.replace(R.id.frame_container,fragReport)
+        fm.commit()
+    }
+
+    fun loadComplaintFrag(fragComplaint : ComplaintsFrag)
+    {
+        val fm = supportFragmentManager.beginTransaction()
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Complaint Box"
+        fm.replace(R.id.frame_container,fragComplaint)
         fm.commit()
     }
 
     fun loadWorkersFrag(fragWorkers : WorkersFrag)
     {
         val fm = supportFragmentManager.beginTransaction()
-        supportActionBar!!.title = "Workers"
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Workers"
         fm.replace(R.id.frame_container,fragWorkers)
         fm.commit()
     }
@@ -217,8 +329,17 @@ override fun onBackPressed() {
     fun loadNotificationFrag(fragNoti : NotificationFrag)
     {
         val fm = supportFragmentManager.beginTransaction()
-        supportActionBar!!.title = "Notifications"
+        supportActionBar!!.title = ""
+        tvNavTitle.text = "Society Notice"
         fm.replace(R.id.frame_container,fragNoti)
         fm.commit()
     }
+}
+
+
+class UserClassFireStore(val id : String,val Profile_Pic_url : String,val UserName : String,val email : String,val pass : String,
+                val city: String,val societyname : String,val wing : String,
+                val FlatNo : String,val relation : String,val userAuth : String)
+{
+    constructor() : this("","","","","","","","","","","")
 }

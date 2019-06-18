@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="10dp"
+        android:orientation="vertical"
+        tools:context=".Add_Complaint">
+
+        <EditText
+                android:id="@+id/addcomplaint_headline"
+                android:textSize="25dp"
+                android:textColor="@color/md_black_1000"
+                android:hint="Complaints HeadLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        />
+
+        <EditText
+                android:id="@+id/addcomplaint_details"
+                android:textSize="25dp"
+                android:textColor="@color/md_black_1000"
+                android:hint="Enter Complaint Details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="50"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:minLines="6"
+                android:gravity="top|left"
+                android:scrollbars="vertical"
+    />
+
+    <Button
+            android:id="@+id/submit_complaint_btn"
+            android:text="Submit"
+            android:textColor="@color/md_white_1000"
+            android:textSize="25dp"
+            android:background="@drawable/button_main_background"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

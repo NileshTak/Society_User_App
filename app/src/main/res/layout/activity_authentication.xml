@@ -163,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:text="continue"/>
             <TextView
+                    android:id="@+id/tvDidntGotCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#019b77"

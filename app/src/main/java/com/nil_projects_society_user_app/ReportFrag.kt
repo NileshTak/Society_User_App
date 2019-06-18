@@ -8,10 +8,7 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
+
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -25,7 +22,9 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -34,41 +33,31 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Picasso
+import com.stfalcon.imageviewer.StfalconImageViewer
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.OnItemLongClickListener
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.custom_records_layout.*
 import kotlinx.android.synthetic.main.custom_records_layout.view.*
-import kotlinx.android.synthetic.main.fragment_report.*
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
-import java.net.URI
+
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ReportFrag : Fragment() {
 
-    lateinit var img_select_camera: Button
-    lateinit var spinner_wing : Spinner
     lateinit var recyclerview_xml_reportfrag : RecyclerView
-    val REQUEST_PERM_WRITE_STORAGE = 102
-    lateinit var datePickerdialog : DatePickerDialog
-    private val CAPTURE_PHOTO = 104
-    internal var imagePath: String? = ""
-    var formate = SimpleDateFormat("dd MMM, yyyy",Locale.US)
-    lateinit var progressDialog: ProgressDialog
-    var counter : Long = 0
-    var spin_value : String = "Wing"
     var currentUserWing : String? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
+        val view = inflater.inflate(R.layout.fragment_report, container, false)
+
+        recyclerview_xml_reportfrag = view.findViewById<RecyclerView>(R.id.recyclerview_xml_reportfrag)
 
         var mAuth = FirebaseAuth.getInstance()
         var userid = mAuth.currentUser!!.uid
@@ -81,14 +70,13 @@ class ReportFrag : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
               val wingData = p0.getValue(UserSocietyClass :: class.java)
                 currentUserWing = wingData!!.wing
+
+                Log.d("UserAppLog",currentUserWing)
             }
         })
 
         fetchRecords()
 
-        val view = inflater.inflate(R.layout.fragment_report, container, false)
-
-        recyclerview_xml_reportfrag = view.findViewById<RecyclerView>(R.id.recyclerview_xml_reportfrag)
 
         return view
     }
@@ -118,25 +106,30 @@ class ReportFrag : Fragment() {
                 }
             })
         }
+
+    inner class FetchRecordItem(var Finalrecord : RecordClass) : Item<ViewHolder>()
+    {
+        override fun getLayout(): Int {
+            return R.layout.custom_records_layout
+        }
+
+        override fun bind(viewHolder: ViewHolder, position: Int) {
+            viewHolder.itemView.date_custom_record.text = Finalrecord.date
+            viewHolder.itemView.wing_spinner_value_status.text = Finalrecord.wing
+            Glide.with(activity).load(Finalrecord.imageUrl).into(viewHolder.itemView.record_img_xml)
+
+
+            viewHolder.itemView.setOnClickListener {
+                var int = Intent(activity,FUllScreenImage :: class.java)
+                int.data = Finalrecord.imageUrl.toUri()
+                startActivity(int)
+            }
+
+        }
     }
-
-
+}
 
 class RecordClass(val id : String,val date: String,val imageUrl : String,val counter : String,val wing : String)
 {
     constructor() : this("","","","","")
-}
-
-class FetchRecordItem(var Finalrecord : RecordClass) : Item<ViewHolder>()
-{
-    override fun getLayout(): Int {
-        return R.layout.custom_records_layout
-    }
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.date_custom_record.text = Finalrecord.date
-        viewHolder.itemView.wing_spinner_value_status.text = Finalrecord.wing
-        Picasso.get().load(Finalrecord.imageUrl).into(viewHolder.itemView.record_img_xml)
-
-    }
 }

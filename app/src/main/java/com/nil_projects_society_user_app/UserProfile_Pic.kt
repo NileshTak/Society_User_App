@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
@@ -28,9 +29,7 @@ class UserProfile_Pic : AppCompatActivity() {
     lateinit var progressDialog: ProgressDialog
     lateinit var username :String
     lateinit var useremail :String
-
-
-
+    var contactno : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,8 @@ class UserProfile_Pic : AppCompatActivity() {
         spinner_flat = findViewById<Spinner>(R.id.spinner_flatnum)
         btn_addflat = findViewById<Button>(R.id.btn_add_flat)
         spinner_relation = findViewById<Spinner>(R.id.spinner_relation)
+
+        contactno = FirebaseAuth.getInstance().currentUser!!.phoneNumber
 
         btn_addflat.setOnClickListener {
             SaveSocietyToFireBase()
@@ -95,10 +96,10 @@ class UserProfile_Pic : AppCompatActivity() {
                                             "Select Building" -> {
                                                 spinner_flat.visibility = View.INVISIBLE
                                             }
-                                            "MADHUMALTI BUILDING" -> {
+                                            "Madhumalti Building" -> {
                                                 spinner_flat.visibility = View.VISIBLE
 
-                                                val optionsFlat = listOf<String>(
+                                                val optionsFlat = arrayListOf<String>(
                                                     "Select Flat",
                                                     "101",
                                                     "102",
@@ -143,33 +144,33 @@ class UserProfile_Pic : AppCompatActivity() {
                                                     "507-08",
                                                     "604-05"
                                                 )
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
-                                            "ROW HOUSE" -> {
+                                            "Row House" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Row House", "1","2","3","4","5","6","7","8","9","10",
                                                     "11","12")
 
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
-                                            "ABOLI BUILDING" -> {
+                                            "Aboli Building" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Flat", "101","102","103","104",
                                                     "201","202","203","204","301","302",
                                                     "303","304","401","402","403","404","501","502","503","504","601",
                                                     "602","603","604","701","702","703","704")
 
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
-                                            "NISHIGANDHA BUILDING" -> {
+                                            "Nishigandha Building" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Flat", "101","102","103","104",
                                                     "201","202","203/04","301","302","303","304","401","402","403","404",
                                                     "501","502","503","504","601","602","603","604")
 
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
-                                            "SAYALI BUILDING" -> {
+                                            "Sayali Building" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Flat", "101","102","103","104","105","106","107","108",
                                                     "201","202","203","204","205","206","207","208","303","304","305","306","307","308","401","402","403","404",
@@ -177,15 +178,15 @@ class UserProfile_Pic : AppCompatActivity() {
                                                     "501","502","503","504","507","508","601","602","607","608",
                                                     "301/302","505/508","603/604","605/606")
 
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
-                                            "SONCHAFA BUIDLING" -> {
+                                            "Sonchafa Building" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Flat", "101","102","103","104",
                                                     "201","202","203","204","303","304","301","302","401","402","403","404",
                                                     "501","502","503","504","601","602","603","604")
 
-                                                flatPassData(optionsFlat)
+                                                flatPassData(optionsFlat,optionsWing.get(position))
                                             }
 
                                         }
@@ -210,7 +211,7 @@ class UserProfile_Pic : AppCompatActivity() {
         }
     }
 
-    private fun flatPassData(arrayOfFlats : List<String>) {
+    private fun flatPassData(arrayOfFlats : List<String>,wingName : String) {
         spinner_flat.adapter = ArrayAdapter<String>(this@UserProfile_Pic,android.R.layout.simple_list_item_1,arrayOfFlats)
         spinner_flat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -240,6 +241,7 @@ class UserProfile_Pic : AppCompatActivity() {
                     }
                 }
                 spin_flatvalue = arrayOfFlats.get(position)
+
             }
         }
     }
@@ -266,10 +268,13 @@ class UserProfile_Pic : AppCompatActivity() {
         items.put("UserEmail", useremail)
         items.put("City", spin_cityvalue)
         items.put("SocietyName", spin_societyvalue)
-        items.put("Wing", spin_wingvalue)
+        items.put("wing", spin_wingvalue)
         items.put("FlatNo", spin_flatvalue)
         items.put("UserRelation", spin_relationvalue)
         items.put("userAuth",userAuth)
+        items.put("MobileNumber",contactno!!)
+        items.put("AlternateMobile","")
+        items.put("Profile_Pic_url","https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/ProfPics%2Fuser_000.png?alt=media&token=f9437bc5-1e64-4755-9116-1cc1b2887b51")
 
         refStore.collection("FlatUsers").document(userID).set(items).addOnSuccessListener {
             progressDialog.dismiss()
@@ -281,7 +286,7 @@ class UserProfile_Pic : AppCompatActivity() {
                 exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
         }
 
-        val usersociety = UserSocietyClass(userID,"",username,useremail,spin_cityvalue,spin_societyvalue,spin_wingvalue,spin_flatvalue,spin_relationvalue,userAuth)
+        val usersociety = UserSocietyClass(userID,"",username,useremail,spin_cityvalue,spin_societyvalue,spin_wingvalue,"",spin_flatvalue,spin_relationvalue,userAuth,contactno!!)
 
         ref.setValue(usersociety)
             .addOnSuccessListener {
@@ -299,9 +304,10 @@ class UserProfile_Pic : AppCompatActivity() {
 
 
 
-class UserSocietyClass(val id : String,val profile_Pic_url : String,val name : String,val email : String,
-                       val city: String,val societyname : String,val wing : String,
-                       val flatno : String,val relation : String,val userAuth : String)
+class UserSocietyClass(val UserID : String,val Profile_Pic_url : String,val UserName : String,val UserEmail : String,
+                       val City: String,val SocietyName : String,val wing : String,val AlternateMobile :String,
+                       val FlatNo : String,val UserRelation : String,val userAuth : String,val MobileNumber : String)
 {
-    constructor() : this("","","","","","","","","","")
+    constructor() : this("","","","","","","","","","","","")
 }
+

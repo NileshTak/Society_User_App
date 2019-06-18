@@ -8,14 +8,18 @@ import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.chaos.view.PinView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.shuhart.stepview.StepView
+import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 
 
@@ -28,9 +32,9 @@ class Authentication : AppCompatActivity() {
     lateinit var stepView: StepView
     lateinit var dialog_verifying: AlertDialog
     lateinit var profile_dialog: AlertDialog
-
-       lateinit var firebaseAuth: FirebaseAuth
-
+    lateinit var firebaseAuth: FirebaseAuth
+    var contactno : String? = null
+    lateinit var tvDidntGotCode : TextView
     lateinit var phoneNumber: String
     private var sendCodeButton: Button? = null
     private var verifyCodeButton: Button? = null
@@ -61,52 +65,30 @@ class Authentication : AppCompatActivity() {
         sendCodeButton = findViewById(R.id.submit1) as Button
         verifyCodeButton = findViewById(R.id.submit2) as Button
         button3 = findViewById(R.id.submit3) as Button
+        tvDidntGotCode = findViewById<TextView>(R.id.tvDidntGotCode)
         firebaseAuth = FirebaseAuth.getInstance()
         phoneNum = findViewById(R.id.phonenumber) as EditText
         verifyCodeET = findViewById(R.id.pinView) as PinView
         phonenumberText = findViewById(R.id.phonenumberText) as TextView
 
+        val window = this.getWindow()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.setStatusBarColor(ContextCompat.getColor(FUllScreenImage@this, R.color.md_blue_custom))
 
         stepView = findViewById(R.id.step_view)
         stepView.setStepsNumber(3)
         stepView.go(0, true)
         layout1.visibility = View.VISIBLE
 
+        sendCodeButton!!.setOnClickListener {
+            sendCode()
+        }
 
-
-
-            sendCodeButton!!.setOnClickListener {
-                val phoneNumber = "+91" +phoneNum!!.text.toString()
-                phonenumberText!!.text = phoneNumber
-
-                if (TextUtils.isEmpty(phoneNumber)) {
-                    phoneNum!!.error = "Enter a Phone Number"
-                    phoneNum!!.requestFocus()
-                } else if (phoneNumber.length < 10) {
-                    phoneNum!!.error = "Please enter a valid phone"
-                    phoneNum!!.requestFocus()
-                } else {
-
-                    if (currentStep < stepView.stepCount - 1) {
-                        currentStep++
-                        stepView.go(currentStep, true)
-                    } else {
-                        stepView.done(true)
-                    }
-
-                    layout1.visibility = View.GONE
-                    layout2.visibility = View.VISIBLE
-
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-
-                        phoneNumber, // Phone number to verify
-                        60, // Timeout duration
-                        TimeUnit.SECONDS, // Unit of timeout
-                        this@Authentication, // Activity (for callback binding)
-                        mCallbacks
-                    )        // OnVerificationStateChangedCallbacks
-                }
-            }
+        tvDidntGotCode.setOnClickListener {
+            Toast.makeText(this,"Sending Code",Toast.LENGTH_LONG).show()
+            sendCode()
+        }
 
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(Credential: PhoneAuthCredential) {
@@ -179,19 +161,42 @@ class Authentication : AppCompatActivity() {
             profile_dialog.show()
             val handler = Handler()
             handler.postDelayed({
+                checkUserAlreadyExistes()
                 profile_dialog.dismiss()
-                var intent = Intent(this@Authentication, Profile_Details::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }, 3000)
+            }, 4000)
         }
+    }
 
+    private fun checkUserAlreadyExistes() {
+        val db = FirebaseFirestore.getInstance()
+        contactno = mAuth.currentUser!!.phoneNumber
+        Log.d("phone",contactno)
+        db.collection("FlatUsers")
+            .whereEqualTo("MobileNumber", contactno)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+               if(documentSnapshot.isEmpty)
+               {
+                   val intent = Intent(this@Authentication, Profile_Details::class.java)
+                   intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                   startActivity(intent)
+                   finish()
+               }
+                else{
+                   val intent = Intent(this@Authentication, MainActivity::class.java)
+                   intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                   startActivity(intent)
+                   finish()
+               }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("SocietyFirestore", "Failed to Check is user exists or not", exception)
+            }
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        mAuth!!.signInWithCredential(credential)
-            .addOnCompleteListener(this, OnCompleteListener<AuthResult> { task ->
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this, { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
@@ -219,11 +224,44 @@ class Authentication : AppCompatActivity() {
     }
 
     companion object {
-
         private val uniqueIdentifier: String? = null
         private val UNIQUE_ID = "UNIQUE_ID"
         private val ONE_HOUR_MILLI = (60 * 60 * 1000).toLong()
-
         private val TAG = "FirebasePhoneNumAuth"
     }
+
+
+    private fun sendCode()
+    {
+        val phoneNumber = "+91" +phoneNum!!.text.toString()
+        phonenumberText!!.text = phoneNumber
+
+        if (TextUtils.isEmpty(phoneNumber)) {
+            phoneNum!!.error = "Enter a Phone Number"
+            phoneNum!!.requestFocus()
+        } else if (phoneNumber.length < 10) {
+            phoneNum!!.error = "Please enter a valid phone"
+            phoneNum!!.requestFocus()
+        } else {
+
+            if (currentStep < stepView.stepCount - 1) {
+                currentStep++
+                stepView.go(currentStep, true)
+            } else {
+                stepView.done(true)
+            }
+
+            layout1.visibility = View.GONE
+            layout2.visibility = View.VISIBLE
+
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber, // Phone number to verify
+                60, // Timeout duration
+                TimeUnit.SECONDS, // Unit of timeout
+                this@Authentication, // Activity (for callback binding)
+                mCallbacks
+            )        // OnVerificationStateChangedCallbacks
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,11 +9,21 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+
+      <ImageView
+              android:visibility="gone"
+              android:src="@drawable/waitreq"
+              android:id="@+id/imgWait"
+              android:layout_centerInParent="true"
+              android:layout_width="350dp"
+              android:layout_height="450dp"/>
+
    <FrameLayout
+           android:visibility="gone"
        android:id="@+id/frame_container"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 
    </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

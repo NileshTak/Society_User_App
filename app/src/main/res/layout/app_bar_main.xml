@@ -11,40 +11,43 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="90dp"
-            android:paddingTop="20dp"
-            android:background="@color/md_blue_custom"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/tvnavTitle"
+                    android:gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:textSize="23dp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/muli_regular"
+                    android:textColor="@color/md_white_1000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/navProfImg"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_alignParentRight="true"
+                    />
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:paddingTop="20dp"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </RelativeLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:fab_labelStyle="@style/customFab"
-        app:fab_addButtonColorNormal="@color/colorPrimaryDark"
-        app:fab_addButtonColorPressed="@color/colorPrimary"
-        app:fab_addButtonPlusIconColor="@color/md_white_1000">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                app:fab_colorNormal="@color/md_white_1000"
-                app:fab_colorPressed="@color/md_white_1000"
-                app:fab_icon="@drawable/ic_assignment_ind_black_24dp"
-                android:id="@+id/log_out"
-                app:fab_title="Log Out"
-                app:fab_size="mini"
-                android:layout_height="wrap_content" />
-
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

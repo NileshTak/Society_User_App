@@ -5,5 +5,5 @@
     <item name="ic_menu_notification" type="drawable">@drawable/notification</item>
     <item name="ic_menu_parking" type="drawable">@drawable/parking</item>
     <item name="ic_menu_worker" type="drawable">@drawable/ic_work_black_24dp</item>
-    <item name="ic_menu_home" type="drawable">@drawable/home</item>
+    <item name="ic_menu_home" type="drawable">@drawable/homelog</item>
 </resources>
