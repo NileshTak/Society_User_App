@@ -77,6 +77,7 @@ class NotificationFrag : Fragment() {
             viewHolder.itemView.setOnClickListener {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalnotifi.imageUrl.toUri()
+                int.putExtra("msg",Finalnotifi.noti)
                 startActivity(int)
             }
         }

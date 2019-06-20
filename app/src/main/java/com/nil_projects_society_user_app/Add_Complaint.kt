@@ -1,5 +1,6 @@
 package com.nil_projects_society_user_app
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_add__complaint.*
 import kotlinx.android.synthetic.main.custom_complaint_layout.*
 import java.net.HttpURLConnection
@@ -24,6 +26,8 @@ class Add_Complaint : AppCompatActivity() {
 
     lateinit var dialog_submitted: AlertDialog
     lateinit var currentdate : String
+    lateinit var progressDialog: ProgressDialog
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,13 +79,15 @@ class Add_Complaint : AppCompatActivity() {
                             show.setView(alertLayout)
                             show.setCancelable(false)
                             dialog_submitted = show.create()
+                            progressDialog.dismiss()
                             dialog_submitted.show()
+                            showAlert()
                             Handler().postDelayed(
                                 {
                                     var int = Intent(this@Add_Complaint,MainActivity :: class.java)
                                     startActivity(int)
                                 },
-                                3000
+                                4050
                             )
                             sendFCMtoUsers()
                         }.addOnFailureListener {
@@ -89,6 +95,16 @@ class Add_Complaint : AppCompatActivity() {
                         }
                 }
             }
+
+    private fun showAlert() {
+        Alerter.create(this@Add_Complaint)
+            .setTitle("Complaint Box")
+            .setIcon(R.drawable.complain)
+            .setDuration(4000)
+            .setText("Complaint has been sent to Higher Authorities. WIll be updated soon..:)")
+            .setBackgroundColorRes(R.color.colorAccent)
+            .show()
+    }
 
     private fun sendFCMtoUsers() {
 
@@ -99,9 +115,7 @@ class Add_Complaint : AppCompatActivity() {
                     .permitAll().build()
                 StrictMode.setThreadPolicy(policy)
                 var sendNotificationID: String
-
                 //This is a Simple Logic to Send Notification different Device Programmatically....
-
                         sendNotificationID = "admin@gmail.com"
                         Log.d("OneSignal App",sendNotificationID)
 
@@ -168,6 +182,10 @@ class Add_Complaint : AppCompatActivity() {
             addcomplaint_details.error = " Please Fill Correct Details"
         }
         else{
+            progressDialog = ProgressDialog(this)
+            progressDialog.setMessage("Wait a Sec....Updating New Complaint")
+            progressDialog.setCancelable(false)
+            progressDialog.show()
             fetchFlatNum()
         }
     }

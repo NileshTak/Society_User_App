@@ -34,6 +34,7 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.custom_layout_last.view.*
 import kotlinx.android.synthetic.main.custom_layout_middle.view.*
 import kotlinx.android.synthetic.main.custom_layout_workerhome.view.*
+import org.w3c.dom.Text
 import java.util.ArrayList
 
 
@@ -44,6 +45,9 @@ class HomeFrag : Fragment() {
     lateinit var first_recycler : RecyclerView
     lateinit var second_recycler : RecyclerView
     lateinit var workers_recycler : RecyclerView
+    lateinit var tvSocietyNotice : TextView
+    lateinit var tvBuildingNotice : TextView
+    lateinit var tvWorker : TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,6 +58,9 @@ class HomeFrag : Fragment() {
         second_recycler = view.findViewById<RecyclerView>(R.id.second_recycler)
         workers_recycler = view.findViewById<RecyclerView>(R.id.workers_recycler)
         sliderView = view.findViewById<SliderView>(R.id.imageSlider)
+        tvSocietyNotice = view.findViewById<TextView>(R.id.tvSocietyNotice)
+        tvBuildingNotice = view.findViewById<TextView>(R.id.tvBuildingNotice)
+        tvWorker = view.findViewById<TextView>(R.id.tvWorker)
 
         fetchSliderImages()
         fetchRecords()
@@ -115,6 +122,7 @@ class HomeFrag : Fragment() {
                     val record = it.getValue(RecordClass::class.java)
 
                     if (record != null) {
+                        tvBuildingNotice.visibility = View.VISIBLE
                         adapter.add(FetchRecordItemHome(record))
                     }
                 }
@@ -159,6 +167,7 @@ class HomeFrag : Fragment() {
                     val notifi = it.getValue(AddNotifiClass::class.java)
 
                     if (notifi != null) {
+                        tvSocietyNotice.visibility = View.VISIBLE
                         adapter.add(FetchNotificationItemHome(notifi))
                     }
                 }
@@ -207,6 +216,7 @@ class HomeFrag : Fragment() {
                     Log.d("SocietyLogs",worker!!.name)
                     if(worker != null)
                     {
+                        tvWorker.visibility = View.VISIBLE
                         adapter.add(WorkerItemHome(worker))
                     }
                 }

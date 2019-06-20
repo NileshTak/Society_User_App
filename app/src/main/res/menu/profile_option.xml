@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/view_prof"
-        app:showAsAction="ifRoom"/>
+            android:id="@+id/view_prof"
+            app:showAsAction="ifRoom"
+            android:title=""/>
 
 </menu>

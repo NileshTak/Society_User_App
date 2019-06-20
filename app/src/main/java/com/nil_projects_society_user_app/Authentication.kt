@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shuhart.stepview.StepView
+import com.tapadoo.alerter.Alerter
 import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 
@@ -162,7 +163,6 @@ class Authentication : AppCompatActivity() {
             val handler = Handler()
             handler.postDelayed({
                 checkUserAlreadyExistes()
-                profile_dialog.dismiss()
             }, 4000)
         }
     }
@@ -177,12 +177,21 @@ class Authentication : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                if(documentSnapshot.isEmpty)
                {
+                   profile_dialog.dismiss()
                    val intent = Intent(this@Authentication, Profile_Details::class.java)
                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                    startActivity(intent)
                    finish()
                }
                 else{
+                   profile_dialog.dismiss()
+                       Alerter.create(this@Authentication)
+                           .setTitle("User")
+                           .setIcon(R.drawable.noti)
+                           .setDuration(4000)
+                           .setText("Successfully Logged In!! :)")
+                           .setBackgroundColorRes(R.color.colorAccent)
+                           .show()
                    val intent = Intent(this@Authentication, MainActivity::class.java)
                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                    startActivity(intent)
@@ -196,7 +205,7 @@ class Authentication : AppCompatActivity() {
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, { task ->
+            .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
@@ -220,7 +229,7 @@ class Authentication : AppCompatActivity() {
 
                     }
                 }
-            })
+            }
     }
 
     companion object {

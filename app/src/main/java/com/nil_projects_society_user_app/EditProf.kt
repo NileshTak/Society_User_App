@@ -1,7 +1,6 @@
 package com.nil_projects_society_user_app
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
@@ -13,15 +12,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
@@ -30,13 +24,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.tapadoo.alerter.Alerter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_edit_prof.*
-import kotlinx.android.synthetic.main.custom_notification.view.*
 import kotlinx.android.synthetic.main.custom_profile_options.view.*
-import kotlinx.android.synthetic.main.custom_records_layout.view.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -70,12 +63,18 @@ class EditProf : AppCompatActivity() {
             askGalleryPermission()
         }
 
-        var alternateNo = edAlternate.text.toString()
-
         btnSave.setOnClickListener {
+            var alternateNo = edAlternate.text.toString()
             if(alternateNo.length < 10 && alternateNo.length > 1)
             {
                 edAlternate.error = "Please Enter valid Mobile Number"
+                Alerter.create(this@EditProf)
+                    .setTitle("Profile Details")
+                    .setIcon(R.drawable.alert)
+                    .setDuration(4000)
+                    .setText("Failed to Update!! Please enter valid Alternate Mobile Number.. :)")
+                    .setBackgroundColorRes(R.color.colorAccent)
+                    .show()
             }
             else{
                 progressDialog = ProgressDialog(this)
@@ -411,11 +410,21 @@ class EditProf : AppCompatActivity() {
                     }
                     else{
                         progressDialog.dismiss()
+                        showAlert()
                         loadProfPic()
                     }
-                    Toast.makeText(this,"Profile Details Updated SuccessFully",Toast.LENGTH_LONG).show()
                 }
             })
+    }
+
+    private fun showAlert() {
+        Alerter.create(this@EditProf)
+            .setTitle("Profile Update")
+            .setIcon(R.drawable.prof)
+            .setDuration(4000)
+            .setText("Profile Details Updated Successfully..!! :)")
+            .setBackgroundColorRes(R.color.colorAccent)
+            .show()
     }
 
     private fun saveAlternateToFirebaseDatabase(Alternate : String) {
@@ -434,11 +443,20 @@ class EditProf : AppCompatActivity() {
 
                     btn_selectphoto_imageview_register.alpha = 0f
 
-                    Toast.makeText(this,"Profile Details Updated SuccessFully",Toast.LENGTH_LONG).show()
+                    showAlert()
                     progressDialog.dismiss()
                     edAlternate.setText("")
                     loadProfPic()
                 }
             })
+            .addOnFailureListener {
+                Alerter.create(this@EditProf)
+                    .setTitle("Profile Details")
+                    .setIcon(R.drawable.alert)
+                    .setDuration(2000)
+                    .setText("Failed to Update!! Please Try after some time!!")
+                    .setBackgroundColorRes(R.color.colorAccent)
+                    .show()
+            }
     }
 }

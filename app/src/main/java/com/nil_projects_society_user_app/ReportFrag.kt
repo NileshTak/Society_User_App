@@ -122,6 +122,7 @@ class ReportFrag : Fragment() {
             viewHolder.itemView.setOnClickListener {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalrecord.imageUrl.toUri()
+                int.putExtra("msg",Finalrecord.date)
                 startActivity(int)
             }
 

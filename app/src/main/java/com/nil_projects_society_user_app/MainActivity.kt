@@ -5,6 +5,8 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,10 +31,12 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.onesignal.OneSignal
+import com.tapadoo.alerter.Alerter
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_edit_prof.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var LoggedIn_User_phone: String? = null
     lateinit var waitReq : ImageView
     lateinit var btnLogout : Button
+    var netInfo : NetworkInfo? = null
     lateinit var tvNavTitle : TextView
     lateinit var ciNavProfImg : CircleImageView
 
@@ -63,8 +68,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .unsubscribeWhenNotificationsAreDisabled(true)
             .init()
 
+        Timer().scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                noInt()
+            }
+        },0,5000)
+
 
         if (user != null) {
+            OneSignal.setSubscription(true)
             LoggedIn_User_phone = user!!.phoneNumber
             disableNav()
             OneSignal.sendTag("NotificationID", LoggedIn_User_phone)
@@ -75,6 +87,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         btnLogout.setOnClickListener {
                 mAuth.signOut()
             OneSignal.setSubscription(false)
+            Alerter.create(this@MainActivity)
+                .setTitle("User")
+                .setIcon(R.drawable.noti)
+                .setDuration(4000)
+                .setText("Successfully Loged Out!! :)")
+                .setBackgroundColorRes(R.color.colorAccent)
+                .show()
                 startActivity(Intent(this, SignUp_Mobile ::class.java))
                 Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
         }
@@ -127,6 +146,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+    }
+
+    private fun noInt() {
+        val cm = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        netInfo = cm.activeNetworkInfo
+
+        if(netInfo == null)
+        {
+            Alerter.create(this@MainActivity)
+                .setTitle("No Internet Connnection")
+                .setIcon(R.drawable.noint)
+                .setText("Please make sure your device is connected to Internet!!")
+                .setBackgroundColorRes(R.color.colorAccent)
+                .show()
+        }
     }
 
     private fun askImpPermission() {

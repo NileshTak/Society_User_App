@@ -32,7 +32,9 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                    android:id="@+id/tvSocietyNotice"
                     android:padding="2dp"
+                    android:visibility="gone"
                     android:text="Society Notice"
                     android:textSize="14dp"
                     android:layout_marginStart="2dp"
@@ -53,6 +55,8 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
+                    android:id="@+id/tvWorker"
+                    android:visibility="gone"
                     android:padding="2dp"
                     android:text="Workers"
                     android:layout_marginTop="8dp"
@@ -74,6 +78,8 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
+                    android:id="@+id/tvBuildingNotice"
+                    android:visibility="gone"
                     android:padding="2dp"
                     android:text="Building Notice"
                     android:textSize="14dp"
