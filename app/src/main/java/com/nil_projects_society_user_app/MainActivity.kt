@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .whereEqualTo("MobileNumber", mob)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                val city = documentSnapshot.toObjects(UserClassFireStore :: class.java)
+                val city = documentSnapshot.toObjects(UserSocietyClass :: class.java)
                 for (document in city) {
                     if(document!!.userAuth.equals("Pending") || document.userAuth.equals("Rejected"))
                     {
@@ -368,12 +368,4 @@ override fun onBackPressed() {
         fm.replace(R.id.frame_container,fragNoti)
         fm.commit()
     }
-}
-
-
-class UserClassFireStore(val id : String,val Profile_Pic_url : String,val UserName : String,val email : String,val pass : String,
-                val city: String,val societyname : String,val wing : String,
-                val FlatNo : String,val relation : String,val userAuth : String)
-{
-    constructor() : this("","","","","","","","","","","")
 }

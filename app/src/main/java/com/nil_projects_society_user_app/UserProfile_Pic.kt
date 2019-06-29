@@ -268,7 +268,7 @@ class UserProfile_Pic : AppCompatActivity() {
         items.put("UserEmail", useremail)
         items.put("City", spin_cityvalue)
         items.put("SocietyName", spin_societyvalue)
-        items.put("wing", spin_wingvalue)
+        items.put("Wing", spin_wingvalue)
         items.put("FlatNo", spin_flatvalue)
         items.put("UserRelation", spin_relationvalue)
         items.put("userAuth",userAuth)
@@ -301,13 +301,3 @@ class UserProfile_Pic : AppCompatActivity() {
             }
     }
 }
-
-
-
-class UserSocietyClass(val UserID : String,val Profile_Pic_url : String,val UserName : String,val UserEmail : String,
-                       val City: String,val SocietyName : String,val wing : String,val AlternateMobile :String,
-                       val FlatNo : String,val UserRelation : String,val userAuth : String,val MobileNumber : String)
-{
-    constructor() : this("","","","","","","","","","","","")
-}
-

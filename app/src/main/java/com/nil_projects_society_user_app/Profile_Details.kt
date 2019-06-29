@@ -57,12 +57,3 @@ class Profile_Details : AppCompatActivity() {
         }
     }
 }
-
-class UserClass(val UserID : String,val Profile_Pic_url : String,val UserName : String,val email : String,
-                val city: String,val societyname : String,val Wing : String,
-                val FlatNo : String,val UserRelation : String,val userAuth : String,val MobileNumber : String,
-                val registrationTokens : MutableList<String>)
-{
-    constructor() : this("","","","","","","","",
-        "","","", mutableListOf())
-}

@@ -112,9 +112,3 @@ class ComplaintsFrag : Fragment() {
         }
     }
 }
-
-
-class ComplaintClass(val CompheadLine : String,val CompDetails : String,val CompUpdatedDate : String,val CompProcess : String)
-{
-    constructor() : this("","","","")
-}

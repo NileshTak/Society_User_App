@@ -58,7 +58,7 @@ class Maintainance_Records : Fragment() {
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
                         documentSnapshot.documents.forEach {
-                            val city = it.toObject(UserClass :: class.java)
+                            val city = it.toObject(UserSocietyClass :: class.java)
                                 db.collection("FlatUsers").document(id).collection("PaidMonths")
                                         .get()
                                         .addOnSuccessListener {
@@ -86,50 +86,49 @@ class Maintainance_Records : Fragment() {
                 }
     }
 
+//    private fun fetchMaintainanceNotpaidMonths() {
+//
+//        var flatNo : String
+//        var wingname : String
+//
+//        db.collection("FlatUsers")
+//                .whereEqualTo("SocietyName", "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
+//                .get()
+//                .addOnSuccessListener { documentSnapshot ->
+//                    documentSnapshot.documents.forEach {
+//                        val city = it.toObject(UserClass :: class.java)
+//                        fetchMonthData(city!!.UserID,city.FlatNo,city.Wing)
+//                    }
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.w("SocietyFirestore", "Error getting documents.", exception)
+//                }
+//    }
 
-    private fun fetchMaintainanceNotpaidMonths() {
-
-        var flatNo : String
-        var wingname : String
-
-        db.collection("FlatUsers")
-                .whereEqualTo("SocietyName", "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    documentSnapshot.documents.forEach {
-                        val city = it.toObject(UserClass :: class.java)
-                        fetchMonthData(city!!.UserID,city.FlatNo,city.Wing)
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("SocietyFirestore", "Error getting documents.", exception)
-                }
-    }
-
-    private fun fetchMonthData(userid : String,flatNo : String,wingname: String)
-    {
-        db.collection("FlatUsers").document(userid).collection("PaidMonths")
-                .get()
-                .addOnSuccessListener {
-                    it.documents.forEach {
-                        val monthsdata = it.toObject(months :: class.java)
-
-                        if (monthsdata!!.MonthsPaid0 != selectedMonth && monthsdata.MonthsPaid1 != selectedMonth
-                                && monthsdata.MonthsPaid2 != selectedMonth && monthsdata.MonthsPaid3 != selectedMonth
-                                && monthsdata.MonthsPaid4 != selectedMonth && monthsdata.MonthsPaid5 != selectedMonth
-                                && monthsdata.MonthsPaid6 != selectedMonth && monthsdata.MonthsPaid7 != selectedMonth
-                                && monthsdata.MonthsPaid8 != selectedMonth && monthsdata.MonthsPaid9 != selectedMonth
-                                && monthsdata.MonthsPaid10 != selectedMonth && monthsdata.MonthsPaid11 != selectedMonth) {
-
-                            Log.d("Count",flatNo)
-
-                            addItem("Pending", arrayOf(""),flatNo,wingname,
-                                    R.color.md_pink_400, R.drawable.ic_ghost)
-
-                        }
-                    }
-                }
-    }
+//    private fun fetchMonthData(userid : String,flatNo : String,wingname: String)
+//    {
+//        db.collection("FlatUsers").document(userid).collection("PaidMonths")
+//                .get()
+//                .addOnSuccessListener {
+//                    it.documents.forEach {
+//                        val monthsdata = it.toObject(months :: class.java)
+//
+//                        if (monthsdata!!.MonthsPaid0 != selectedMonth && monthsdata.MonthsPaid1 != selectedMonth
+//                                && monthsdata.MonthsPaid2 != selectedMonth && monthsdata.MonthsPaid3 != selectedMonth
+//                                && monthsdata.MonthsPaid4 != selectedMonth && monthsdata.MonthsPaid5 != selectedMonth
+//                                && monthsdata.MonthsPaid6 != selectedMonth && monthsdata.MonthsPaid7 != selectedMonth
+//                                && monthsdata.MonthsPaid8 != selectedMonth && monthsdata.MonthsPaid9 != selectedMonth
+//                                && monthsdata.MonthsPaid10 != selectedMonth && monthsdata.MonthsPaid11 != selectedMonth) {
+//
+//                            Log.d("Count",flatNo)
+//
+//                            addItem("Pending", arrayOf(""),flatNo,wingname,
+//                                    R.color.md_pink_400, R.drawable.ic_ghost)
+//
+//                        }
+//                    }
+//                }
+//    }
 
 
     private fun addItem(title: String, subItems: Array<String>,flatNo : String,wingname : String, colorRes: Int, iconRes: Int) {

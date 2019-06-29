@@ -163,7 +163,7 @@ class EditProf : AppCompatActivity() {
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
             viewHolder.itemView.EditProfSocietynameAns.text = Finaldata.SocietyName
-            viewHolder.itemView.EditProfWingnameAns.text = Finaldata.wing
+            viewHolder.itemView.EditProfWingnameAns.text = Finaldata.Wing
             viewHolder.itemView.EditProfFlatNoAns.text = Finaldata.FlatNo
             viewHolder.itemView.EditProfMobileAns.text = Finaldata.MobileNumber
             viewHolder.itemView.EditProfAlterMobileAns.text = Finaldata.AlternateMobile
@@ -397,11 +397,8 @@ class EditProf : AppCompatActivity() {
             .get()
             .addOnSuccessListener(OnSuccessListener<QuerySnapshot> { queryDocumentSnapshots ->
                 for (documentSnapshot in queryDocumentSnapshots) {
-                    val note = documentSnapshot.toObject<UserSocietyClass>(UserSocietyClass::class.java!!)
-
                     val bookRef = db.document("FlatUsers/" + documentSnapshot.id)
                     bookRef.update("Profile_Pic_url", profileImageUrl)
-               //     Glide.with(this).load(note.Profile_Pic_url).into(selectphoto_imageview_register)
                     btn_selectphoto_imageview_register.alpha = 0f
 
                     if(Alternate.isNotEmpty())
@@ -439,8 +436,6 @@ class EditProf : AppCompatActivity() {
 
                     val bookRef = db.document("FlatUsers/" + documentSnapshot.id)
                     bookRef.update("AlternateMobile",Alternate)
-             //       Glide.with(this).load(note.Profile_Pic_url).into(selectphoto_imageview_register)
-
                     btn_selectphoto_imageview_register.alpha = 0f
 
                     showAlert()

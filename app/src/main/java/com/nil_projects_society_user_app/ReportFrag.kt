@@ -32,6 +32,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.stfalcon.imageviewer.StfalconImageViewer
 import com.xwray.groupie.GroupAdapter
@@ -61,22 +62,24 @@ class ReportFrag : Fragment() {
 
         var mAuth = FirebaseAuth.getInstance()
         var userid = mAuth.currentUser!!.uid
-        val refWing = FirebaseDatabase.getInstance().getReference("/Users/$userid")
-        refWing.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
 
+        var db = FirebaseFirestore.getInstance()
+        db.collection("FlatUsers")
+            .whereEqualTo("UserID", userid)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                documentSnapshot.documents.forEach {
+                    val city = it.toObject(UserSocietyClass::class.java)
+                    if (city != null) {
+                        currentUserWing = city.Wing
+                    }
+                }
             }
-
-            override fun onDataChange(p0: DataSnapshot) {
-              val wingData = p0.getValue(UserSocietyClass :: class.java)
-                currentUserWing = wingData!!.wing
-
-                Log.d("UserAppLog",currentUserWing)
+            .addOnFailureListener { exception ->
+                Log.w("SocietyFirestore", "Error getting documents.", exception)
             }
-        })
 
         fetchRecords()
-
 
         return view
     }
@@ -125,12 +128,6 @@ class ReportFrag : Fragment() {
                 int.putExtra("msg",Finalrecord.date)
                 startActivity(int)
             }
-
         }
     }
-}
-
-class RecordClass(val id : String,val date: String,val imageUrl : String,val counter : String,val wing : String)
-{
-    constructor() : this("","","","","")
 }

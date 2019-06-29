@@ -201,7 +201,7 @@ class Add_Complaint : AppCompatActivity() {
                 documentSnapshot.documents.forEach {
                     var city = it.toObject(UserSocietyClass :: class.java)
 
-                     updateComplaintOnFirebase(city!!.FlatNo,userid,city!!.MobileNumber,city!!.wing)
+                     updateComplaintOnFirebase(city!!.FlatNo,userid,city!!.MobileNumber,city!!.Wing)
                 }
             }
     }
