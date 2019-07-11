@@ -28,7 +28,7 @@
 
         <TextView
                 android:id="@+id/EditProfSocietynameAns"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -53,7 +53,7 @@
         <TextView
                 android:id="@+id/EditProfWingnameAns"
                 android:layout_below="@id/EditProfSocietynameAns"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -78,7 +78,7 @@
         <TextView
                 android:id="@+id/EditProfFlatNoAns"
                 android:layout_below="@id/EditProfWingnameAns"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -103,7 +103,7 @@
         <TextView
                 android:id="@+id/EditProfMobileAns"
                 android:layout_below="@id/EditProfFlatNoAns"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -117,7 +117,7 @@
         <TextView
                 android:id="@+id/EditProfAlterMobile"
                 android:layout_below="@id/EditProfMobileAns"
-                android:layout_width="160dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -129,7 +129,7 @@
         <TextView
                 android:id="@+id/EditProfAlterMobileAns"
                 android:layout_below="@id/EditProfMobileAns"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical"
@@ -152,7 +152,7 @@
         <TextView
                 android:id="@+id/EditProfAuthenAns"
                 android:layout_below="@id/EditProfAlterMobile"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:fontFamily="@font/muli_regular"

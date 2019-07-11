@@ -10,26 +10,32 @@
         android:orientation="vertical"
         tools:context=".Add_Complaint">
 
-        <EditText
-                android:id="@+id/addcomplaint_headline"
+        <Button
+                android:id="@+id/btnAddImage"
                 android:textSize="25dp"
                 android:textColor="@color/md_black_1000"
-                android:hint="Complaints HeadLine"
+                android:text="Click Image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
         />
 
+    <ImageView
+            android:id="@+id/img_select_camera"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
         <EditText
-                android:id="@+id/addcomplaint_details"
+                android:id="@+id/addcomplaint_headline"
                 android:textSize="25dp"
                 android:textColor="@color/md_black_1000"
                 android:hint="Enter Complaint Details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="50"
+                android:maxLines="30"
                 android:inputType="textMultiLine"
-                android:lines="8"
-                android:minLines="6"
+                android:lines="4"
+                android:minLines="2"
                 android:gravity="top|left"
                 android:scrollbars="vertical"
     />

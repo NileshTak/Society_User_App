@@ -5,10 +5,11 @@
     android:gravity="center_horizontal"
     android:background="@color/md_blue_custom">
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
+            android:id="@+id/gifImg"
         android:layout_width="400dp"
-        android:layout_height="300dp"
-        android:background="@drawable/profgif"/>
+            android:background="@color/md_white_1000"
+        android:layout_height="250dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +18,7 @@
         android:textSize="25sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="10dp"/>
 
 </LinearLayout>

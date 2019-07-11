@@ -93,9 +93,10 @@ class ComplaintsFrag : Fragment() {
         override fun bind(viewHolder: ViewHolder, position: Int) {
             viewHolder.itemView.headline_complaint.text = FinalComplaintList.CompheadLine
             viewHolder.itemView.headline_complaint_1.text = FinalComplaintList.CompheadLine
-            viewHolder.itemView.Details_complaint.text = FinalComplaintList.CompDetails
             viewHolder.itemView.process_complaint.text = FinalComplaintList.CompProcess
             viewHolder.itemView.date_complaint.text = FinalComplaintList.CompUpdatedDate
+            Glide.with(context).load(FinalComplaintList.ComplaintImg).into(viewHolder.itemView.Img_complaint)
+
 
             if(FinalComplaintList.CompProcess == "Under Process")
             {

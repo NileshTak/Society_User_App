@@ -1,19 +1,28 @@
 package com.nil_projects_society_user_app
 
+import android.Manifest
 import android.app.ProgressDialog
 import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.StrictMode
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
+import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.activity_add__complaint.*
 import kotlinx.android.synthetic.main.custom_complaint_layout.*
@@ -26,12 +35,15 @@ class Add_Complaint : AppCompatActivity() {
 
     lateinit var dialog_submitted: AlertDialog
     lateinit var currentdate : String
+    lateinit var img_select_camera : ImageView
+    var imageUri  : Uri? = null
     lateinit var progressDialog: ProgressDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add__complaint)
+        img_select_camera = findViewById<ImageView>(R.id.img_select_camera)
         supportActionBar!!.title = "Add Complaint"
         val actionbar = supportActionBar
         actionbar!!.setDisplayHomeAsUpEnabled(true)
@@ -40,8 +52,21 @@ class Add_Complaint : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         currentdate = sdf.format(Date())
 
+        val bundle: Bundle? = intent.extras
+        if(bundle != null)
+        {
+            var uri = bundle!!.getString("ImageUri")
+            imageUri = uri.toUri()
+            Log.d("CameraUri",imageUri.toString())
+            Glide.with(Add_Complaint@this).load(imageUri).into(img_select_camera)
+        }
+
         submit_complaint_btn.setOnClickListener {
             checkFields()
+        }
+
+        btnAddImage.setOnClickListener {
+            askCameraPermission()
         }
     }
 
@@ -50,7 +75,39 @@ class Add_Complaint : AppCompatActivity() {
         return true
     }
 
-    private fun updateComplaintOnFirebase(FlatNum : String,UserID : String,Mobile : String,WingName : String)
+    private fun askCameraPermission() {
+        askPermission(Manifest.permission.CAMERA){
+            var int = Intent(UpdateReport@this,Camera2APIScreen::class.java)
+            startActivity(int)
+        }.onDeclined { e ->
+            if (e.hasDenied()) {
+                //the list of denied permissions
+                e.denied.forEach {
+                }
+
+                AlertDialog.Builder(this@Add_Complaint)
+                    .setMessage("Please accept our permissions.. Otherwise you will not be able to use some of our Important Features.")
+                    .setPositiveButton("yes") { dialog, which ->
+                        e.askAgain()
+                    } //ask again
+                    .setNegativeButton("no") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+
+            if(e.hasForeverDenied()) {
+                //the list of forever denied permissions, user has check 'never ask again'
+                e.foreverDenied.forEach {
+                }
+                // you need to open setting manually if you really need it
+                e.goToSettings();
+            }
+        }
+    }
+
+
+    private fun updateComplaintOnFirebase(FlatNum : String,UserID : String,Mobile : String,WingName : String,ComplaintImg : String)
     {
         var db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser!!.uid
@@ -63,8 +120,8 @@ class Add_Complaint : AppCompatActivity() {
                 val items = HashMap<String, Any>()
                 items.put("CompUserID",UserID)
                 items.put("CompFlatNum", FlatNum)
+                items.put("ComplaintImg",ComplaintImg)
                 items.put("CompheadLine", addcomplaint_headline.text.toString())
-                items.put("CompDetails", addcomplaint_details.text.toString())
                 items.put("CompUpdatedDate", currentdate)
                 items.put("CompUserMobileNo", Mobile)
                 items.put("CompWingName", WingName)
@@ -75,6 +132,8 @@ class Add_Complaint : AppCompatActivity() {
                         .set(items).addOnSuccessListener {
                             val inflater = getLayoutInflater()
                             val alertLayout = inflater.inflate(R.layout.compliaintsubmitted_dialog, null)
+                            var Successimg = alertLayout.findViewById<ImageView>(R.id.successImg)
+                            Glide.with(this).asGif().load(R.drawable.successgif).into(Successimg)
                             val show = AlertDialog.Builder(this@Add_Complaint)
                             show.setView(alertLayout)
                             show.setCancelable(false)
@@ -171,26 +230,52 @@ class Add_Complaint : AppCompatActivity() {
         }
     }
 
+    private fun UploadImgtoFirebase() {
+        Log.d("SocietyLogs","Uri is Uplod"+imageUri.toString())
+        if(imageUri == null)
+        {
+            progressDialog.dismiss()
+            Toast.makeText(applicationContext,"Please Select Valid Image & Valid Data",Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val filename = UUID.randomUUID().toString()
+        val ref = FirebaseStorage.getInstance().getReference("/ComplaintImages/$filename")
+
+        ref.putFile(imageUri!!)
+            .addOnSuccessListener {
+                Toast.makeText(applicationContext,"Image Uploaded",Toast.LENGTH_LONG).show()
+                Log.d("SocietyLogs","Image uploaded")
+                ref.downloadUrl.addOnSuccessListener {
+                    it.toString()
+
+                    fetchFlatNum(it.toString())
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
 
     private fun checkFields() {
         if(addcomplaint_headline.text.isEmpty())
         {
             addcomplaint_headline.error = "Please Fill Correct Details"
         }
-        else if(addcomplaint_details.text.isEmpty())
-        {
-            addcomplaint_details.error = " Please Fill Correct Details"
-        }
+//        else if(addcomplaint_details.text.isEmpty())
+//        {
+//            addcomplaint_details.error = " Please Fill Correct Details"
+//        }
         else{
             progressDialog = ProgressDialog(this)
             progressDialog.setMessage("Wait a Sec....Updating New Complaint")
             progressDialog.setCancelable(false)
             progressDialog.show()
-            fetchFlatNum()
+            UploadImgtoFirebase()
         }
     }
 
-    private fun fetchFlatNum() {
+    private fun fetchFlatNum(ImageUri: String) {
         var db = FirebaseFirestore.getInstance()
         val userid = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -201,7 +286,7 @@ class Add_Complaint : AppCompatActivity() {
                 documentSnapshot.documents.forEach {
                     var city = it.toObject(UserSocietyClass :: class.java)
 
-                     updateComplaintOnFirebase(city!!.FlatNo,userid,city!!.MobileNumber,city!!.Wing)
+                     updateComplaintOnFirebase(city!!.FlatNo,userid,city!!.MobileNumber,city!!.Wing,ImageUri)
                 }
             }
     }

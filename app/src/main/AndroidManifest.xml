@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.hardware.camera2.full"/>
 
 
     <application
@@ -31,6 +33,7 @@
         </activity>
         <activity android:name=".FUllScreenImage">
         </activity>
+        <activity android:name=".Camera2APIScreen"/>
         <activity
                 android:name=".EditProf"
                 android:theme="@style/AppTheme">

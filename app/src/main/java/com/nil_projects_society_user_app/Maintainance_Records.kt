@@ -49,6 +49,8 @@ class Maintainance_Records : Fragment() {
 
         var flatNo : String
         var wingname : String
+        var Amount : String
+        var Fine : String
 
         var id = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -67,6 +69,8 @@ class Maintainance_Records : Fragment() {
 
                                                 flatNo = city!!.FlatNo
                                                 wingname = city!!.Wing
+                                                Amount = monthsdata!!.Amount
+                                                Fine = monthsdata!!.Fine
 
                                                 if (monthsdata != null) {
                                                     //           adapter.add(FetchNotificationItem(monthsdata))
@@ -74,7 +78,7 @@ class Maintainance_Records : Fragment() {
                                                     addItem(monthsdata.ReceiptNumber, arrayOf(monthsdata.MonthsPaid0,monthsdata.MonthsPaid1,monthsdata.MonthsPaid2,monthsdata.MonthsPaid3
                                                             ,monthsdata.MonthsPaid4,monthsdata.MonthsPaid5,monthsdata.MonthsPaid6
                                                             ,monthsdata.MonthsPaid7,monthsdata.MonthsPaid8,monthsdata.MonthsPaid9
-                                                            ,monthsdata.MonthsPaid10,monthsdata.MonthsPaid11),flatNo,wingname,
+                                                            ,monthsdata.MonthsPaid10,monthsdata.MonthsPaid11),flatNo,wingname,Amount,Fine,
                                                             R.color.md_pink_400, R.drawable.ic_ghost)
                                                 }
                                             }
@@ -131,8 +135,10 @@ class Maintainance_Records : Fragment() {
 //    }
 
 
-    private fun addItem(title: String, subItems: Array<String>,flatNo : String,wingname : String, colorRes: Int, iconRes: Int) {
-        //Let's create an item with R.layout.expanding_layout
+    private fun addItem(title: String, subItems: Array<String>,flatNo : String,wingname : String,
+                        Amount : String,Fine : String,
+                        colorRes: Int, iconRes: Int)
+    {    //Let's create an item with R.layout.expanding_layout
         val item = mExpandingList!!.createNewItem(R.layout.expanding_layout)
 
         //If item creation is successful, let's configure it
@@ -143,6 +149,15 @@ class Maintainance_Records : Fragment() {
             (item.findViewById(R.id.title) as TextView).text = title
             (item.findViewById(R.id.custom_flatno) as TextView).text = flatNo
             (item.findViewById(R.id.custom_societyname) as TextView).text = wingname
+            if(Amount.isNotEmpty() && Fine.isNotEmpty())
+            {
+                (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount+$Fine"
+            }
+            else
+            {
+                (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount"
+            }
+
 
             //We can create items in batch.
             item.createSubItems(subItems.size)
@@ -207,8 +222,8 @@ class Maintainance_Records : Fragment() {
 class months(val MonthsPaid0: String,val MonthsPaid1 : String,val MonthsPaid2 : String,val MonthsPaid3: String,val MonthsPaid4: String,
              val MonthsPaid5: String,val MonthsPaid6: String,val MonthsPaid7: String,val MonthsPaid8: String,
              val MonthsPaid9: String,val MonthsPaid10: String,val MonthsPaid11: String,
-             val ReceiptNumber : String)
+             val ReceiptNumber : String,val Amount : String,val Fine : String)
 {
     constructor() : this("","","","","","",
-            "","","","","","","")
+            "","","","","","","","","")
 }

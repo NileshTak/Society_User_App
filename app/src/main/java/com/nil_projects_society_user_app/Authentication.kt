@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.chaos.view.PinView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseException
@@ -20,6 +21,8 @@ import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.shuhart.stepview.StepView
 import com.tapadoo.alerter.Alerter
+import kotlinx.android.synthetic.main.processing_dialog.view.*
+import kotlinx.android.synthetic.main.profile_create_dialog.view.*
 import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 
@@ -41,6 +44,7 @@ class Authentication : AppCompatActivity() {
     private var verifyCodeButton: Button? = null
     private val signOutButton: Button? = null
     private var button3: Button? = null
+    lateinit var pandaImg : ImageView
     var context : Context = this
 
     private var phoneNum: EditText? = null
@@ -60,6 +64,8 @@ class Authentication : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
+        pandaImg = findViewById<ImageView>(R.id.pandaImg)
+
         layout1 = findViewById(R.id.layout1) as LinearLayout
         layout2 = findViewById(R.id.layout2) as LinearLayout
         layout3 = findViewById(R.id.layout3) as LinearLayout
@@ -72,12 +78,15 @@ class Authentication : AppCompatActivity() {
         verifyCodeET = findViewById(R.id.pinView) as PinView
         phonenumberText = findViewById(R.id.phonenumberText) as TextView
 
+        Glide.with(this@Authentication).asGif().load(R.drawable.panda_dribbble).into(pandaImg)
+
+
         val window = this.getWindow()
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.setStatusBarColor(ContextCompat.getColor(FUllScreenImage@this, R.color.md_blue_custom))
 
-        stepView = findViewById(R.id.step_view)
+        stepView = findViewById(R.id.step_view) as StepView
         stepView.setStepsNumber(3)
         stepView.go(0, true)
         layout1.visibility = View.VISIBLE
@@ -96,8 +105,8 @@ class Authentication : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Verfication Process",Toast.LENGTH_SHORT).show()
                     val inflater = getLayoutInflater()
                     val alertLayout = inflater.inflate(R.layout.processing_dialog, null)
+                Glide.with(this@Authentication).asGif().load(R.drawable.load).into(alertLayout.peopleImg)
                     val show = AlertDialog.Builder(this@Authentication)
-
                     show.setView(alertLayout)
                     show.setCancelable(false)
                     dialog_verifying = show.create()
@@ -134,7 +143,7 @@ class Authentication : AppCompatActivity() {
                 val inflater = getLayoutInflater()
                 val alertLayout = inflater.inflate(R.layout.processing_dialog, null)
                 val show = AlertDialog.Builder(this@Authentication)
-
+                Glide.with(this@Authentication).asGif().load(R.drawable.load).into(alertLayout.peopleImg)
                 show.setView(alertLayout)
                 show.setCancelable(false)
                 dialog_verifying = show.create()
@@ -155,6 +164,7 @@ class Authentication : AppCompatActivity() {
             }
             val inflater = getLayoutInflater()
             val alertLayout = inflater.inflate(R.layout.profile_create_dialog, null)
+            Glide.with(this@Authentication).asGif().load(R.drawable.profgif).into(alertLayout.gifImg)
             val show = AlertDialog.Builder(this@Authentication)
             show.setView(alertLayout)
             show.setCancelable(false)
