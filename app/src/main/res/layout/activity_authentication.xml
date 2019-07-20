@@ -187,13 +187,16 @@
             android:id="@+id/layout3"
             android:visibility="gone"
             android:gravity="center"
-            android:background="#00A99D"
+            android:background="@color/md_white_1000"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <ImageView
-                    android:id="@+id/pandaImg"
-                    android:layout_marginTop="-30dp"
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_view"
+                    android:layout_gravity="center_horizontal"
+                    app:lottie_autoPlay="true"
+                    app:lottie_fileName="building.json"
+                    app:lottie_loop="true"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>
             <TextView

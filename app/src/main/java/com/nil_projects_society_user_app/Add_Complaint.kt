@@ -24,8 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.tapadoo.alerter.Alerter
+import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_add__complaint.*
 import kotlinx.android.synthetic.main.custom_complaint_layout.*
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -37,6 +39,7 @@ class Add_Complaint : AppCompatActivity() {
     lateinit var currentdate : String
     lateinit var img_select_camera : ImageView
     var imageUri  : Uri? = null
+    var FinalUri : Uri? = null
     lateinit var progressDialog: ProgressDialog
 
 
@@ -58,7 +61,10 @@ class Add_Complaint : AppCompatActivity() {
             var uri = bundle!!.getString("ImageUri")
             imageUri = uri.toUri()
             Log.d("CameraUri",imageUri.toString())
-            Glide.with(Add_Complaint@this).load(imageUri).into(img_select_camera)
+            Toast.makeText(this@Add_Complaint,imageUri.toString(),Toast.LENGTH_LONG).show()
+            Glide.with(this@Add_Complaint).load(imageUri).into(img_select_camera)
+
+            compress(imageUri!!)
         }
 
         submit_complaint_btn.setOnClickListener {
@@ -75,8 +81,19 @@ class Add_Complaint : AppCompatActivity() {
         return true
     }
 
+
+    private fun compress(imageUri: Uri) {
+        var auxFile = File(imageUri.path)
+        var compressedImageFile = Compressor(this).compressToFile(auxFile)
+        Log.d("CameraUri",compressedImageFile.toString())
+
+        FinalUri = Uri.fromFile(compressedImageFile)
+        Log.d("CameraUri",FinalUri.toString())
+    }
+
+
     private fun askCameraPermission() {
-        askPermission(Manifest.permission.CAMERA){
+        askPermission(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE){
             var int = Intent(UpdateReport@this,Camera2APIScreen::class.java)
             startActivity(int)
         }.onDeclined { e ->
@@ -232,7 +249,7 @@ class Add_Complaint : AppCompatActivity() {
 
     private fun UploadImgtoFirebase() {
         Log.d("SocietyLogs","Uri is Uplod"+imageUri.toString())
-        if(imageUri == null)
+        if(FinalUri == null)
         {
             progressDialog.dismiss()
             Toast.makeText(applicationContext,"Please Select Valid Image & Valid Data",Toast.LENGTH_LONG).show()
@@ -242,7 +259,7 @@ class Add_Complaint : AppCompatActivity() {
         val filename = UUID.randomUUID().toString()
         val ref = FirebaseStorage.getInstance().getReference("/ComplaintImages/$filename")
 
-        ref.putFile(imageUri!!)
+        ref.putFile(FinalUri!!)
             .addOnSuccessListener {
                 Toast.makeText(applicationContext,"Image Uploaded",Toast.LENGTH_LONG).show()
                 Log.d("SocietyLogs","Image uploaded")

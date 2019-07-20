@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:background="@color/md_blue_custom">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:background="@color/md_blue_custom">
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/gifImg"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="profile.json"
+            app:lottie_loop="true"
         android:layout_width="400dp"
             android:background="@color/md_white_1000"
         android:layout_height="250dp"/>
@@ -17,7 +22,7 @@
         android:textColor="@color/md_white_1000"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/muli_regular"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="10dp"/>
 

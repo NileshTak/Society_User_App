@@ -100,6 +100,7 @@ class Camera2APIScreen : AppCompatActivity() {
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera2api)
@@ -129,8 +130,8 @@ class Camera2APIScreen : AppCompatActivity() {
                     .getOutputSizes(ImageFormat.JPEG)
 
             //Capture image with custom size
-            var width = 600
-            var height = 440
+            var width = 640
+            var height = 480
             if (jpegSizes != null && jpegSizes.size > 0) {
                 width = jpegSizes[0].width
                 height = jpegSizes[0].height
@@ -149,12 +150,12 @@ class Camera2APIScreen : AppCompatActivity() {
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation))
 
             val root = Environment.getExternalStorageDirectory().toString()
-            val myDir = File(root + "/Society_App_Complaints")
+            val myDir = File(root + "/Society_App_BuildingRecords")
             myDir.mkdirs()
             val generator = Random()
             var n = 10000
             n = generator.nextInt(n)
-            val OutletFname = "ComplaintImg-$n.jpg"
+            val OutletFname = "RecordImg-$n.jpg"
 
             file = File(myDir,OutletFname)
             val readerListener = object : ImageReader.OnImageAvailableListener {
@@ -230,10 +231,10 @@ class Camera2APIScreen : AppCompatActivity() {
     private fun imgDis() {
         runOnUiThread {
             var uri = Uri.fromFile(file)
-                var int = Intent(Camera2APIScreen@this,Add_Complaint::class.java)
-                int.putExtra("ImageUri",uri.toString())
-                Log.d("CameraUri",uri.toString())
-                startActivity(int)
+            var int = Intent(Camera2APIScreen@this,Add_Complaint::class.java)
+            int.putExtra("ImageUri",uri.toString())
+            Log.d("CameraUri",uri.toString())
+            startActivity(int)
         }
     }
 

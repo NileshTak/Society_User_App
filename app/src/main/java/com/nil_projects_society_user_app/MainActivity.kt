@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var mAuth : FirebaseAuth
     var LoggedIn_User_phone: String? = null
     lateinit var waitReq : ImageView
-    lateinit var btnLogout : Button
+//    lateinit var btnLogout : Button
     var netInfo : NetworkInfo? = null
     lateinit var tvNavTitle : TextView
     lateinit var ciNavProfImg : CircleImageView
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        btnLogout = findViewById<Button>(R.id.btnLogout)
+     //   btnLogout = findViewById<Button>(R.id.btnLogout)
         tvNavTitle = findViewById<TextView>(R.id.tvnavTitle)
         ciNavProfImg = findViewById<CircleImageView>(R.id.navProfImg)
         waitReq = findViewById<ImageView>(R.id.imgWait)
@@ -81,22 +81,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             disableNav()
             OneSignal.sendTag("NotificationID", LoggedIn_User_phone)
         }else{
-            startActivity(Intent(this, SignUp_Mobile::class.java))
+            startActivity(Intent(this, Authentication::class.java))
         }
 
-        btnLogout.setOnClickListener {
-                mAuth.signOut()
-            OneSignal.setSubscription(false)
-            Alerter.create(this@MainActivity)
-                .setTitle("User")
-                .setIcon(R.drawable.noti)
-                .setDuration(4000)
-                .setText("Successfully Loged Out!! :)")
-                .setBackgroundColorRes(R.color.colorAccent)
-                .show()
-                startActivity(Intent(this, SignUp_Mobile ::class.java))
-                Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
-        }
+//        btnLogout.setOnClickListener {
+//                mAuth.signOut()
+//            OneSignal.setSubscription(false)
+//            Alerter.create(this@MainActivity)
+//                .setTitle("User")
+//                .setIcon(R.drawable.noti)
+//                .setDuration(4000)
+//                .setText("Successfully Loged Out!! :)")
+//                .setBackgroundColorRes(R.color.colorAccent)
+//                .show()
+//                startActivity(Intent(this, SignUp_Mobile ::class.java))
+//                Toast.makeText(this, "Logged out Successfully :)", Toast.LENGTH_LONG).show()
+//        }
 
         askImpPermission()
 
@@ -309,6 +309,21 @@ override fun onBackPressed() {
             R.id.nav_workers -> {
                 loadWorkersFrag(fragWorkers = WorkersFrag())
             }
+
+            R.id.nav_logout ->
+            {
+                mAuth.signOut()
+                OneSignal.setSubscription(false)
+                Alerter.create(this@MainActivity)
+                    .setTitle("User")
+                    .setIcon(R.drawable.noti)
+                    .setDuration(4000)
+                    .setText("Successfully Logged Out!! :)")
+                    .setBackgroundColorRes(R.color.colorAccent)
+                    .show()
+                startActivity(Intent(this, Authentication ::class.java))
+
+            }
         }
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -321,6 +336,8 @@ override fun onBackPressed() {
         val fm = supportFragmentManager.beginTransaction()
         supportActionBar!!.title = ""
         tvNavTitle.text = "Maintainance Records"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragMaintain)
         fm.commit()
     }
@@ -329,6 +346,8 @@ override fun onBackPressed() {
     {
         val fm = supportFragmentManager.beginTransaction()
         tvNavTitle.text = "Home"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragHome)
         fm.commit()
     }
@@ -338,6 +357,8 @@ override fun onBackPressed() {
         val fm = supportFragmentManager.beginTransaction()
         supportActionBar!!.title = ""
         tvNavTitle.text = "Building Notice"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragReport)
         fm.commit()
     }
@@ -347,6 +368,8 @@ override fun onBackPressed() {
         val fm = supportFragmentManager.beginTransaction()
         supportActionBar!!.title = ""
         tvNavTitle.text = "Complaint Box"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragComplaint)
         fm.commit()
     }
@@ -356,6 +379,8 @@ override fun onBackPressed() {
         val fm = supportFragmentManager.beginTransaction()
         supportActionBar!!.title = ""
         tvNavTitle.text = "Workers"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragWorkers)
         fm.commit()
     }
@@ -365,6 +390,8 @@ override fun onBackPressed() {
         val fm = supportFragmentManager.beginTransaction()
         supportActionBar!!.title = ""
         tvNavTitle.text = "Society Notice"
+        fm.setCustomAnimations(android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right)
         fm.replace(R.id.frame_container,fragNoti)
         fm.commit()
     }

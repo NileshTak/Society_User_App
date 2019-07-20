@@ -44,7 +44,6 @@ class Authentication : AppCompatActivity() {
     private var verifyCodeButton: Button? = null
     private val signOutButton: Button? = null
     private var button3: Button? = null
-    lateinit var pandaImg : ImageView
     var context : Context = this
 
     private var phoneNum: EditText? = null
@@ -64,8 +63,6 @@ class Authentication : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
-        pandaImg = findViewById<ImageView>(R.id.pandaImg)
-
         layout1 = findViewById(R.id.layout1) as LinearLayout
         layout2 = findViewById(R.id.layout2) as LinearLayout
         layout3 = findViewById(R.id.layout3) as LinearLayout
@@ -77,9 +74,6 @@ class Authentication : AppCompatActivity() {
         phoneNum = findViewById(R.id.phonenumber) as EditText
         verifyCodeET = findViewById(R.id.pinView) as PinView
         phonenumberText = findViewById(R.id.phonenumberText) as TextView
-
-        Glide.with(this@Authentication).asGif().load(R.drawable.panda_dribbble).into(pandaImg)
-
 
         val window = this.getWindow()
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -105,7 +99,6 @@ class Authentication : AppCompatActivity() {
                 Toast.makeText(applicationContext,"Verfication Process",Toast.LENGTH_SHORT).show()
                     val inflater = getLayoutInflater()
                     val alertLayout = inflater.inflate(R.layout.processing_dialog, null)
-                Glide.with(this@Authentication).asGif().load(R.drawable.load).into(alertLayout.peopleImg)
                     val show = AlertDialog.Builder(this@Authentication)
                     show.setView(alertLayout)
                     show.setCancelable(false)
@@ -143,14 +136,15 @@ class Authentication : AppCompatActivity() {
                 val inflater = getLayoutInflater()
                 val alertLayout = inflater.inflate(R.layout.processing_dialog, null)
                 val show = AlertDialog.Builder(this@Authentication)
-                Glide.with(this@Authentication).asGif().load(R.drawable.load).into(alertLayout.peopleImg)
                 show.setView(alertLayout)
                 show.setCancelable(false)
                 dialog_verifying = show.create()
                 dialog_verifying.show()
-
-                val credential = PhoneAuthProvider.getCredential(mVerificationId!!, verificationCode)
-                signInWithPhoneAuthCredential(credential)
+                val handler = Handler()
+                handler.postDelayed({
+                    val credential = PhoneAuthProvider.getCredential(mVerificationId!!, verificationCode)
+                    signInWithPhoneAuthCredential(credential)
+                },5000)
 
             }
         }
@@ -164,7 +158,6 @@ class Authentication : AppCompatActivity() {
             }
             val inflater = getLayoutInflater()
             val alertLayout = inflater.inflate(R.layout.profile_create_dialog, null)
-            Glide.with(this@Authentication).asGif().load(R.drawable.profgif).into(alertLayout.gifImg)
             val show = AlertDialog.Builder(this@Authentication)
             show.setView(alertLayout)
             show.setCancelable(false)
@@ -173,7 +166,7 @@ class Authentication : AppCompatActivity() {
             val handler = Handler()
             handler.postDelayed({
                 checkUserAlreadyExistes()
-            }, 4000)
+            }, 5000)
         }
     }
 

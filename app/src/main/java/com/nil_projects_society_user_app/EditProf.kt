@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -24,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.onesignal.OneSignal
 import com.tapadoo.alerter.Alerter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -44,6 +47,7 @@ class EditProf : AppCompatActivity() {
     lateinit var edRelation : TextView
     lateinit var edAlternate : EditText
     lateinit var btnSave : Button
+    lateinit var mAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,8 @@ class EditProf : AppCompatActivity() {
         val actionbar = supportActionBar
         actionbar!!.setDisplayHomeAsUpEnabled(true)
         actionbar!!.setDisplayHomeAsUpEnabled(true)
+
+        mAuth = FirebaseAuth.getInstance()
 
         recyclerview_profile_option = findViewById(R.id.recyclerview_option_profile) as RecyclerView
         edRelation = findViewById<TextView>(R.id.tvEditProfRelation)
@@ -85,6 +91,31 @@ class EditProf : AppCompatActivity() {
             }
         }
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.menu_logout, menu)
+//        return true
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when(item?.itemId)
+//        {
+//            R.id.logOut ->
+//            { OneSignal.setSubscription(false)
+//                Alerter.create(this@EditProf)
+//                    .setTitle("User")
+//                    .setIcon(R.drawable.noti)
+//                    .setDuration(4000)
+//                    .setText("Successfully Logged Out!! :)")
+//                    .setBackgroundColorRes(R.color.colorAccent)
+//                    .show()
+//                startActivity(Intent(this, SignUp_Mobile ::class.java))
+//                mAuth.signOut()
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private fun askGalleryPermission() {
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE){
