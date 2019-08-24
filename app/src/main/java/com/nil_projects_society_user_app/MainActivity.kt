@@ -81,7 +81,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             disableNav()
             OneSignal.sendTag("NotificationID", LoggedIn_User_phone)
         }else{
+
             startActivity(Intent(this, Authentication::class.java))
+            finish()
         }
 
 //        btnLogout.setOnClickListener {
@@ -254,6 +256,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 })
         }
+
     }
 
 override fun onBackPressed() {

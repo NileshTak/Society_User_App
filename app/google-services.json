@@ -8,35 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669272831642:android:0c1f5dd3a1c6d412",
-        "android_client_info": {
-          "package_name": "com.nil_projects.sharedtransitionanimation"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "669272831642-dh8qic84an8g2e0ubgj56v8a1n26e4qd.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBTVoOXJDaXEhCllnf6ahL-XeRlAleh9oE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "669272831642-dh8qic84an8g2e0ubgj56v8a1n26e4qd.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:669272831642:android:48d28a3a2a54d161",
         "android_client_info": {
           "package_name": "com.nil_projects.society_app"
@@ -80,6 +51,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "669272831642-d9qfou8m81l6ada579hgdvodf934dvf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nil_projects_society_user_app",
+            "certificate_hash": "3b4179772bf7f1e37dcb6756aa88f272d5bd6335"
+          }
+        },
         {
           "client_id": "669272831642-msc9d66mce1d6smkbp4hn3ed55blfnqo.apps.googleusercontent.com",
           "client_type": 1,

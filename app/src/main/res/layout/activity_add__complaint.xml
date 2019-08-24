@@ -10,31 +10,39 @@
         android:orientation="vertical"
         tools:context=".Add_Complaint">
 
-        <Button
-                android:id="@+id/btnAddImage"
-                android:textSize="25dp"
-                android:textColor="@color/md_black_1000"
-                android:text="Click Image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        />
-
     <ImageView
             android:id="@+id/img_select_camera"
             android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"
+
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:id="@+id/btnAddImage"
+                 android:text="Click Image"
+                android:layout_below="@id/img_select_camera"
+             android:layout_gravity="center_horizontal"
+                android:layout_width="50dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/vlog"
+                android:layout_height="50dp"
+        />
+
+
 
         <EditText
                 android:id="@+id/addcomplaint_headline"
                 android:textSize="25dp"
-                android:textColor="@color/md_black_1000"
+                android:layout_below="@id/btnAddImage"
+                 android:textColor="@color/md_black_1000"
                 android:hint="Enter Complaint Details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="30"
                 android:inputType="textMultiLine"
                 android:lines="4"
+
                 android:minLines="2"
                 android:gravity="top|left"
                 android:scrollbars="vertical"
@@ -43,8 +51,9 @@
     <Button
             android:id="@+id/submit_complaint_btn"
             android:text="Submit"
-            android:textColor="@color/md_white_1000"
-            android:textSize="25dp"
+            android:layout_below="@id/addcomplaint_headline"
+             android:textColor="@color/md_white_1000"
+            android:textSize="22dp"
             android:background="@drawable/button_main_background"
             android:textAllCaps="false"
             android:layout_width="match_parent"

@@ -36,6 +36,7 @@ import java.util.*
 class Add_Complaint : AppCompatActivity() {
 
     lateinit var dialog_submitted: AlertDialog
+    lateinit var btnAddImage : ImageView
     lateinit var currentdate : String
     lateinit var img_select_camera : ImageView
     var imageUri  : Uri? = null
@@ -47,6 +48,7 @@ class Add_Complaint : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add__complaint)
         img_select_camera = findViewById<ImageView>(R.id.img_select_camera)
+        btnAddImage = findViewById<ImageView>(R.id.btnAddImage)
         supportActionBar!!.title = "Add Complaint"
         val actionbar = supportActionBar
         actionbar!!.setDisplayHomeAsUpEnabled(true)
