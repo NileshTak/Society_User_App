@@ -108,7 +108,7 @@
 
                         </LinearLayout>
 
-                     <ImageView
+                     <com.airbnb.lottie.LottieAnimationView
                              android:layout_below="@+id/linear"
                              android:id="@+id/img_display_success"
                                     android:layout_width="80dp"
@@ -154,7 +154,7 @@
                             android:fontFamily="@font/muli_regular"
                             android:textColor="#000000" />
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/problem_logo"
                             android:layout_width="50dp"
                             android:layout_marginTop="18dp"

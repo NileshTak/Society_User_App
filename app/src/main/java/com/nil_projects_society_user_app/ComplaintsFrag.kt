@@ -100,14 +100,28 @@ class ComplaintsFrag : Fragment() {
 
             if(FinalComplaintList.CompProcess == "Under Process")
             {
-                Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.problem_logo)
-                Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.img_display_success)
+                viewHolder.itemView.problem_logo.setAnimation("processing.json")
+                viewHolder.itemView.problem_logo.playAnimation()
+                viewHolder.itemView.problem_logo.loop(true)
+              //  Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.problem_logo)
+                //Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.img_display_success)
 
+                viewHolder.itemView.img_display_success.setAnimation("processing.json")
+                viewHolder.itemView.img_display_success.playAnimation()
+                viewHolder.itemView.img_display_success.loop(true)
              //   viewHolder.itemView.img_display_success.setBackgroundResource(R.drawable.processing)
             }
             else{
-                Glide.with(context).asGif().load(R.drawable.checkmark).into(viewHolder.itemView.problem_logo)
-                Glide.with(context).asGif().load(R.drawable.checkmark).into(viewHolder.itemView.img_display_success)
+                viewHolder.itemView.problem_logo.setAnimation("tick.json")
+                viewHolder.itemView.problem_logo.playAnimation()
+                viewHolder.itemView.problem_logo.loop(true)
+
+                viewHolder.itemView.img_display_success.setAnimation("tick.json")
+                viewHolder.itemView.img_display_success.playAnimation()
+                viewHolder.itemView.img_display_success.loop(true)
+
+//                Glide.with(context).asGif().load(R.drawable.checkmark).into(viewHolder.itemView.problem_logo)
+//                Glide.with(context).asGif().load(R.drawable.checkmark).into(viewHolder.itemView.img_display_success)
 //                viewHolder.itemView.problem_logo.setBackgroundResource(R.drawable.checkmark)
 //                viewHolder.itemView.img_display_success.setBackgroundResource(R.drawable.checkmark)
             }

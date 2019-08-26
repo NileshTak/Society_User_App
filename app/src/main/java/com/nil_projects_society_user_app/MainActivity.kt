@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
+import com.crashlytics.android.Crashlytics
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.navigation.NavigationView
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.onesignal.OneSignal
 import com.tapadoo.alerter.Alerter
 import de.hdodenhof.circleimageview.CircleImageView
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_edit_prof.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -51,7 +53,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(applicationContext, Crashlytics())
         setContentView(R.layout.activity_main)
+
      //   btnLogout = findViewById<Button>(R.id.btnLogout)
         tvNavTitle = findViewById<TextView>(R.id.tvnavTitle)
         ciNavProfImg = findViewById<CircleImageView>(R.id.navProfImg)
@@ -211,14 +215,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     {
                         frame_container.visibility = View.GONE
                         waitReq.visibility = View.VISIBLE
-                        Glide.with(this@MainActivity).load(document.Profile_Pic_url).into(ciNavProfImg)
+                        Glide.with(applicationContext).load(document.Profile_Pic_url).into(ciNavProfImg)
                         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                         disableNav()
                     }
                     else{
                         frame_container.visibility = View.VISIBLE
                         waitReq.visibility = View.GONE
-                        Glide.with(this@MainActivity).load(document.Profile_Pic_url).into(ciNavProfImg)
+                        Glide.with(applicationContext).load(document.Profile_Pic_url).into(ciNavProfImg)
                         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                         disableNav()
                         fetchUserDataNAV()
@@ -250,11 +254,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     for (documentSnapshot in queryDocumentSnapshots) {
                         val note = documentSnapshot.toObject<UserSocietyClass>(UserSocietyClass::class.java)
                       //  Picasso.get().load(note.Profile_Pic_url).into(navProfPic)
-                        Glide.with(this).load(note.Profile_Pic_url).into(navProfPic)
+                        Glide.with(applicationContext).load(note.Profile_Pic_url).into(navProfPic)
                         navUseremail.text = note.UserEmail
                         navUsername.text = note.UserName
                     }
                 })
+        }
+        else
+        {
+            Log.d("LogingOut","Logging Out")
         }
 
     }
@@ -324,7 +332,10 @@ override fun onBackPressed() {
                     .setText("Successfully Logged Out!! :)")
                     .setBackgroundColorRes(R.color.colorAccent)
                     .show()
-                startActivity(Intent(this, Authentication ::class.java))
+                val i = Intent(this@MainActivity, Authentication::class.java)
+
+                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(i)
 
             }
         }

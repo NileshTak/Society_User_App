@@ -5,12 +5,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import android.view.animation.AnimationUtils.loadAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
+
 
 
 class SplashScreen : AppCompatActivity() {
@@ -19,7 +24,9 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(applicationContext, Crashlytics())
         setContentView(R.layout.activity_splash_screen)
+
 
         img = findViewById(R.id.app_image_view)
 
@@ -27,6 +34,8 @@ class SplashScreen : AppCompatActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.setStatusBarColor(ContextCompat.getColor(SplashScreen@this, R.color.md_blue_custom))
+
+     //   forceCrash(img)
 
         val aniRotate = AnimationUtils.loadAnimation(applicationContext, R.anim.spin)
         img.startAnimation(aniRotate)
@@ -38,5 +47,10 @@ class SplashScreen : AppCompatActivity() {
         }, 4000)
 
     }
+//
+//    fun forceCrash(view: View) {
+//        throw RuntimeException("This is a crash")
+//    }
+
 
 }

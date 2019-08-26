@@ -46,8 +46,8 @@
                 android:name=".Profile_Details"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".SignUp_Mobile">
-        </activity>
+<!--        <activity android:name=".SignUp_Mobile">-->
+<!--        </activity>-->
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".Authentication"/>
@@ -68,6 +68,11 @@
             </intent-filter>
 
         </activity>
-    </application>
 
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="6039dfc03d2463bf00644057b83e86e8cb0b3f53" />
+
+    </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
