@@ -33,8 +33,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.stfalcon.imageviewer.StfalconImageViewer
+import com.tapadoo.alerter.Alerter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.OnItemLongClickListener
@@ -85,32 +87,71 @@ class ReportFrag : Fragment() {
     }
 
     private fun fetchRecords() {
-        val ref = FirebaseDatabase.getInstance().getReference("/RecordsDates")
+//        val ref = FirebaseDatabase.getInstance().getReference("/RecordsDates")
+//
+//        var recordsorder = ref.orderByChild("counter")
+//        ref.addListenerForSingleValueEvent(object : ValueEventListener
+//        {
+//            val adapter = GroupAdapter<ViewHolder>()
+//
+//            override fun onCancelled(p0: DatabaseError) {
+//
+//            }
+//
+//            override fun onDataChange(p0: DataSnapshot) {
+//                p0.children.forEach {
+//                    recordsorder
+//                    val record = it.getValue(RecordClass::class.java)
+//
+//                    if (record != null && record.wing == currentUserWing) {
+//                        adapter.add(FetchRecordItem(record))
+//                    }
+//                }
+//                recyclerview_xml_reportfrag.adapter = adapter
+//                }
+//            })
 
-        var recordsorder = ref.orderByChild("counter")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener
-        {
-            val adapter = GroupAdapter<ViewHolder>()
 
-            override fun onCancelled(p0: DatabaseError) {
+        val adapter = GroupAdapter<ViewHolder>()
 
-            }
+        var db = FirebaseFirestore.getInstance()
 
-            override fun onDataChange(p0: DataSnapshot) {
-                p0.children.forEach {
-                    recordsorder
-                    val record = it.getValue(RecordClass::class.java)
+        db.collection("Records")
+            .orderBy("counter", Query.Direction.DESCENDING)
+         //   .whereEqualTo("wing",currentUserWing)
+            .get()
+            .addOnSuccessListener {
+
+                it.documents.forEach {
+                    val record = it.toObject(reportModelClass::class.java)
+
 
                     if (record != null && record.wing == currentUserWing) {
                         adapter.add(FetchRecordItem(record))
                     }
+
+
+
                 }
                 recyclerview_xml_reportfrag.adapter = adapter
-                }
-            })
-        }
+            }
+            .addOnFailureListener {
 
-    inner class FetchRecordItem(var Finalrecord : RecordClass) : Item<ViewHolder>()
+                Log.d("Error is","error: "+it.toString())
+                Alerter.create(getActivity())
+                    .setTitle("Building Notice")
+                    .setIcon(R.drawable.alert)
+                    .setDuration(4000)
+                    .setText("Failed to Fetch!! Please Try after some time!!")
+                    .setBackgroundColorRes(R.color.colorAccent)
+                    .show()
+            }
+
+
+
+    }
+
+    inner class FetchRecordItem(var Finalrecord : reportModelClass) : Item<ViewHolder>()
     {
         override fun getLayout(): Int {
             return R.layout.custom_records_layout
@@ -126,6 +167,8 @@ class ReportFrag : Fragment() {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalrecord.imageUrl.toUri()
                 int.putExtra("msg",Finalrecord.date)
+                int.putExtra("id",Finalrecord.id)
+                int.putExtra("collectionName","Records")
                 startActivity(int)
             }
         }

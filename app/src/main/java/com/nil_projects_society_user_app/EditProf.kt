@@ -3,6 +3,7 @@ package com.nil_projects_society_user_app
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.media.ExifInterface
@@ -33,6 +34,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_edit_prof.*
 import kotlinx.android.synthetic.main.custom_profile_options.view.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -48,6 +50,11 @@ class EditProf : AppCompatActivity() {
     lateinit var edAlternate : EditText
     lateinit var btnSave : Button
     lateinit var mAuth : FirebaseAuth
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

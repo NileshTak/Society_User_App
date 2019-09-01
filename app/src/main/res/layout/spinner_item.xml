@@ -6,4 +6,4 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:textColor="@color/md_black_1000"
-        android:fontFamily="@font/muli_regular"/>
+      />

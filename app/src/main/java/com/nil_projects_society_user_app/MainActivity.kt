@@ -10,6 +10,7 @@ import android.net.NetworkInfo
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -38,6 +39,7 @@ import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_edit_prof.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.*
 
 
@@ -50,6 +52,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var netInfo : NetworkInfo? = null
     lateinit var tvNavTitle : TextView
     lateinit var ciNavProfImg : CircleImageView
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -225,7 +232,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         Glide.with(applicationContext).load(document.Profile_Pic_url).into(ciNavProfImg)
                         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                         disableNav()
-                        fetchUserDataNAV()
+
+
+                        if (FirebaseAuth.getInstance().currentUser?.uid != null)
+                        {
+                            fetchUserDataNAV()
+                        }
+
                     }
                 }
             }
@@ -325,13 +338,7 @@ override fun onBackPressed() {
             {
                 mAuth.signOut()
                 OneSignal.setSubscription(false)
-                Alerter.create(this@MainActivity)
-                    .setTitle("User")
-                    .setIcon(R.drawable.noti)
-                    .setDuration(4000)
-                    .setText("Successfully Logged Out!! :)")
-                    .setBackgroundColorRes(R.color.colorAccent)
-                    .show()
+
                 val i = Intent(this@MainActivity, Authentication::class.java)
 
                 i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

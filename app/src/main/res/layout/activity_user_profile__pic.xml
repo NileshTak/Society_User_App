@@ -106,8 +106,9 @@
                 android:text="Add Flat"
                 android:textAllCaps="false"
                 android:textSize="18dp"
+
                 android:textColor="@color/md_white_1000"
-                android:background="@color/md_blue_custom"
+                android:background="@drawable/button_main_background"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="200dp"
                 android:layout_height="50dp"/>

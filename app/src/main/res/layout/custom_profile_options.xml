@@ -19,99 +19,123 @@
             android:id="@+id/EditProfSocietyname"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:text="Society Name"
             android:layout_alignParentLeft="true"
             android:textColor="#0d0c0c"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfSocietynameAns"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Title"
                 android:layout_alignParentRight="true"
-                android:fontFamily="@font/muli_regular"
+
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfWingname"
                 android:layout_below="@+id/EditProfSocietynameAns"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Wing Name"
                 android:layout_alignParentLeft="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfWingnameAns"
                 android:layout_below="@id/EditProfSocietynameAns"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Title"
-                android:fontFamily="@font/muli_regular"
+
                 android:layout_alignParentRight="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfFlatNo"
                 android:layout_below="@id/EditProfWingnameAns"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Flat Number"
                 android:layout_alignParentLeft="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfFlatNoAns"
                 android:layout_below="@id/EditProfWingnameAns"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
                 android:gravity="center_vertical"
                 android:text="Title"
-                android:fontFamily="@font/muli_regular"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
                 android:layout_alignParentRight="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfMobile"
                 android:layout_below="@id/EditProfFlatNoAns"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Mobile Number"
                 android:layout_alignParentLeft="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfMobileAns"
                 android:layout_below="@id/EditProfFlatNoAns"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Title"
                 android:layout_alignParentRight="true"
                 android:textColor="#0d0c0c"
-                android:fontFamily="@font/muli_regular"
-                android:textSize="20dp" />
+
+                android:textSize="16sp" />
 
 
         <TextView
@@ -119,47 +143,60 @@
                 android:layout_below="@id/EditProfMobileAns"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Alternate Mobile Number"
                 android:layout_alignParentLeft="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfAlterMobileAns"
                 android:layout_below="@id/EditProfMobileAns"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:layout_alignParentRight="true"
                 android:textColor="#0d0c0c"
-                android:fontFamily="@font/muli_regular"
-                android:textSize="20dp" />
+
+                android:textSize="16sp" />
 
         <TextView
                 android:layout_below="@id/EditProfAlterMobile"
-                android:layout_width="160dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="Account Verification"
                 android:layout_alignParentLeft="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
         <TextView
                 android:id="@+id/EditProfAuthenAns"
                 android:layout_below="@id/EditProfAlterMobile"
-                android:layout_width="150dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:fontFamily="@font/muli_regular"
+
+
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
                 android:gravity="center_vertical"
                 android:layout_alignParentRight="true"
                 android:textColor="#0d0c0c"
-                android:textSize="20dp" />
+                android:textSize="16sp" />
 
 
 

@@ -1,6 +1,7 @@
 package com.nil_projects_society_user_app
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_user_profile__pic.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class UserProfile_Pic : AppCompatActivity() {
 
@@ -37,9 +39,17 @@ class UserProfile_Pic : AppCompatActivity() {
     var contactno : String? = null
     lateinit var existingFlats : ArrayList<String>
 
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile__pic)
+        supportActionBar!!.title = "User Details"
+
 
         val bundle : Bundle? = intent.extras
         username = bundle!!.getString("name")
@@ -258,7 +268,7 @@ class UserProfile_Pic : AppCompatActivity() {
         progressDialog.setMessage("Adding your Society Details")
         var mAuth = FirebaseAuth.getInstance()
         var userID = mAuth.currentUser!!.uid
-        Toast.makeText(this,userID,Toast.LENGTH_LONG).show()
+
 
         val ref = FirebaseDatabase.getInstance().getReference("/Users/$userID")
         val refStore = FirebaseFirestore.getInstance()
@@ -280,11 +290,10 @@ class UserProfile_Pic : AppCompatActivity() {
         items.put("Profile_Pic_url","https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/ProfPics%2Fuser_000.png?alt=media&token=f9437bc5-1e64-4755-9116-1cc1b2887b51")
 
         refStore.collection("FlatUsers").document(userID).set(items).addOnSuccessListener {
-            progressDialog.dismiss()
-                Toast.makeText(this, "Successfully uploaded to the database :)", Toast.LENGTH_LONG).show()
-            var intent = Intent(this,MainActivity :: class.java)
+           var intent = Intent(this,MainActivity :: class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+             Toast.makeText(this, "Profile Created Successfully :)", Toast.LENGTH_LONG).show()
+
         }.addOnFailureListener {
                 exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
         }
@@ -294,7 +303,8 @@ class UserProfile_Pic : AppCompatActivity() {
         ref.setValue(usersociety)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                Toast.makeText(this,"User Society Details Saved",Toast.LENGTH_LONG).show()
+                startActivity(intent)
+
 //                var intent = Intent(this,MainActivity :: class.java)
 //                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
 //                startActivity(intent)
@@ -319,13 +329,14 @@ class UserProfile_Pic : AppCompatActivity() {
                 for (document in city) {
                     if(document.FlatNo == spin_flatvalue && document.Wing == spin_wingvalue)
                     {
+                        progressDialog.dismiss()
                         AlertDialog.Builder(this@UserProfile_Pic)
                             .setMessage("User Alreay Exist!! Please Change Your Details")
                             .setPositiveButton("Ok") { dialog, which ->
 
-                            } //ask again
+                            }
                             .show()
-                        progressDialog.dismiss()
+
                     }
                     else{
                        SaveSocietyToFireBase()

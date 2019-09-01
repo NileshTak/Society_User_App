@@ -22,7 +22,9 @@
                     android:layout_margin="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_height="150dp"
-                    android:foreground="@drawable/photo"
+
+
+                 android:foreground="@drawable/profile"
                     android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_select_photo_button"/>
 
@@ -51,9 +53,10 @@
                     android:id="@+id/tvEditProfRelation"
                     android:layout_below="@+id/name_title"
                     android:layout_width="match_parent"
-                    android:text="Relation"
+
                     android:textColorHint="@color/colorAccent"
                     android:textSize="22dp"
+                    android:textStyle="bold"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/colorAccent"
                     android:gravity="center_horizontal"

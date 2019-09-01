@@ -18,6 +18,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_profile__details.*
 
+import androidx.core.content.ContextCompat
+import android.view.WindowManager
+
+
+
 @Suppress("DEPRECATION")
 class Profile_Details : AppCompatActivity() {
 
@@ -30,10 +35,14 @@ class Profile_Details : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile__details)
 
+        val window = this.getWindow()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.setStatusBarColor(ContextCompat.getColor(Profile_Details@this,  R.color.md_blue_custom))
+
         nameeditText = findViewById<EditText>(R.id.name_extended_edit_text)
         emaileditText = findViewById<EditText>(R.id.email_extended_edit_text)
 
-        emaileditText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
         btn_SignUp.setOnClickListener {
             passUserDetails()

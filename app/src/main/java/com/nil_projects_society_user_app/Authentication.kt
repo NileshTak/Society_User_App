@@ -24,6 +24,7 @@ import com.tapadoo.alerter.Alerter
 import kotlinx.android.synthetic.main.processing_dialog.view.*
 import kotlinx.android.synthetic.main.profile_create_dialog.view.*
 import org.w3c.dom.Text
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.concurrent.TimeUnit
 
 
@@ -55,6 +56,12 @@ class Authentication : AppCompatActivity() {
 
     lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var mAuth: FirebaseAuth
+
+
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +97,7 @@ class Authentication : AppCompatActivity() {
         }
 
         tvDidntGotCode.setOnClickListener {
-            Toast.makeText(this,"Sending Code",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Sending Code Again",Toast.LENGTH_LONG).show()
             sendCode()
         }
 
@@ -108,7 +115,7 @@ class Authentication : AppCompatActivity() {
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
-                Toast.makeText(applicationContext, "Failed" +e, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Something Went Wrong", Toast.LENGTH_SHORT).show()
                 Log.d("Failure",e.toString())
             }
 
@@ -226,7 +233,7 @@ class Authentication : AppCompatActivity() {
                 } else {
 
                     dialog_verifying.dismiss()
-                    Toast.makeText(this@Authentication, "Something wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Authentication, "Incorrect OTP", Toast.LENGTH_SHORT).show()
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
 

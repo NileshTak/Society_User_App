@@ -91,18 +91,18 @@ class ComplaintsFrag : Fragment() {
         }
 
         override fun bind(viewHolder: ViewHolder, position: Int) {
-            viewHolder.itemView.headline_complaint.text = FinalComplaintList.CompheadLine
+        //    viewHolder.itemView.headline_complaint.text = FinalComplaintList.CompheadLine
             viewHolder.itemView.headline_complaint_1.text = FinalComplaintList.CompheadLine
-            viewHolder.itemView.process_complaint.text = FinalComplaintList.CompProcess
+            viewHolder.itemView.process_complaint.text = "          "+FinalComplaintList.CompProcess+"         "
             viewHolder.itemView.date_complaint.text = FinalComplaintList.CompUpdatedDate
             Glide.with(context).load(FinalComplaintList.ComplaintImg).into(viewHolder.itemView.Img_complaint)
 
 
             if(FinalComplaintList.CompProcess == "Under Process")
             {
-                viewHolder.itemView.problem_logo.setAnimation("processing.json")
-                viewHolder.itemView.problem_logo.playAnimation()
-                viewHolder.itemView.problem_logo.loop(true)
+//                viewHolder.itemView.problem_logo.setAnimation("processing.json")
+//                viewHolder.itemView.problem_logo.playAnimation()
+//                viewHolder.itemView.problem_logo.loop(true)
               //  Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.problem_logo)
                 //Glide.with(context).asGif().load(R.drawable.processing).into(viewHolder.itemView.img_display_success)
 
@@ -112,9 +112,9 @@ class ComplaintsFrag : Fragment() {
              //   viewHolder.itemView.img_display_success.setBackgroundResource(R.drawable.processing)
             }
             else{
-                viewHolder.itemView.problem_logo.setAnimation("tick.json")
-                viewHolder.itemView.problem_logo.playAnimation()
-                viewHolder.itemView.problem_logo.loop(true)
+//                viewHolder.itemView.problem_logo.setAnimation("tick.json")
+//                viewHolder.itemView.problem_logo.playAnimation()
+//                viewHolder.itemView.problem_logo.loop(true)
 
                 viewHolder.itemView.img_display_success.setAnimation("tick.json")
                 viewHolder.itemView.img_display_success.playAnimation()
@@ -126,9 +126,9 @@ class ComplaintsFrag : Fragment() {
 //                viewHolder.itemView.img_display_success.setBackgroundResource(R.drawable.checkmark)
             }
 
-            viewHolder.itemView.setOnClickListener {
-                viewHolder.itemView.folding_cell_complaint.toggle(false)
-            }
+//            viewHolder.itemView.setOnClickListener {
+//                viewHolder.itemView.folding_cell_complaint.toggle(false)
+//            }
         }
     }
 }
