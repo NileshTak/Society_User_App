@@ -55,11 +55,11 @@ android {
         multiDexEnabled true
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [
-                onesignal_app_id               : '69734071-08a8-4d63-a7ab-adda8e2197f0',
+                onesignal_app_id               : '76c98e53-d3e6-455c-9517-59cca14aed22',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: 'REMOTE'
         ]
@@ -124,6 +124,9 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.0.7'
 
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    // Paging Library
+    implementation 'android.arch.paging:runtime:1.0.1'
+    implementation "com.firebaseui:firebase-ui-firestore:4.1.0"
 
 }
 

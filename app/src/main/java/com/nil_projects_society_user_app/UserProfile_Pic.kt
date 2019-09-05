@@ -78,7 +78,7 @@ class UserProfile_Pic : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(this@UserProfile_Pic,"Selected City is : "+optionsCity.get(position), Toast.LENGTH_LONG).show()
+          //      Toast.makeText(this@UserProfile_Pic,"Selected City is : "+optionsCity.get(position), Toast.LENGTH_LONG).show()
                 if(optionsCity.get(position) == "Pune")
                 {
                     spinner_societyname.visibility = View.VISIBLE
@@ -92,7 +92,7 @@ class UserProfile_Pic : AppCompatActivity() {
                         }
 
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            Toast.makeText(this@UserProfile_Pic,"Selected Society is : "+optionsSocietyName.get(position), Toast.LENGTH_LONG).show()
+                //            Toast.makeText(this@UserProfile_Pic,"Selected Society is : "+optionsSocietyName.get(position), Toast.LENGTH_LONG).show()
                             if(optionsSocietyName.get(position) == "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
                             {
                                 spinner_buildingwing.visibility = View.VISIBLE
@@ -107,7 +107,7 @@ class UserProfile_Pic : AppCompatActivity() {
                                     }
 
                                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                        Toast.makeText(this@UserProfile_Pic,"Selected Wing is : "+optionsWing.get(position), Toast.LENGTH_LONG).show()
+                    //                    Toast.makeText(this@UserProfile_Pic,"Selected Wing is : "+optionsWing.get(position), Toast.LENGTH_LONG).show()
                                         when(optionsWing.get(position))
                                         {
                                             "Select Building" -> {
@@ -236,7 +236,7 @@ class UserProfile_Pic : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(this@UserProfile_Pic,"Selected Flat is : "+arrayOfFlats.get(position), Toast.LENGTH_LONG).show()
+            //    Toast.makeText(this@UserProfile_Pic,"Selected Flat is : "+arrayOfFlats.get(position), Toast.LENGTH_LONG).show()
                 if(arrayOfFlats.get(position) != "Select Flat")
                 {
                     linear_radio.visibility = View.VISIBLE
@@ -252,7 +252,6 @@ class UserProfile_Pic : AppCompatActivity() {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
                             spin_relationvalue = optionsRelation.get(position)
-                            Toast.makeText(this@UserProfile_Pic,"Selected Relation is : "+spin_relationvalue, Toast.LENGTH_LONG).show()
 
                         }
                     }
@@ -290,12 +289,22 @@ class UserProfile_Pic : AppCompatActivity() {
         items.put("Profile_Pic_url","https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/ProfPics%2Fuser_000.png?alt=media&token=f9437bc5-1e64-4755-9116-1cc1b2887b51")
 
         refStore.collection("FlatUsers").document(userID).set(items).addOnSuccessListener {
-           var intent = Intent(this,MainActivity :: class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-             Toast.makeText(this, "Profile Created Successfully :)", Toast.LENGTH_LONG).show()
+//           var intent = Intent(this,MainActivity :: class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            refStore.collection("FlatUsers").document(userID)
+                .collection("PaidMonths").document("FirstDoc")
+                .set(items).addOnSuccessListener {
+
+                }
+                .addOnFailureListener{
+
+                }
+
+
 
         }.addOnFailureListener {
-                exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+      //          exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
         }
 
         val usersociety = UserSocietyClass(userID,"",username,useremail,spin_cityvalue,spin_societyvalue,spin_wingvalue,"",spin_flatvalue,spin_relationvalue,userAuth,contactno!!)
@@ -303,11 +312,12 @@ class UserProfile_Pic : AppCompatActivity() {
         ref.setValue(usersociety)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                startActivity(intent)
+            //    startActivity(intent)
+                Toast.makeText(this, "Profile Created Successfully :)", Toast.LENGTH_LONG).show()
 
-//                var intent = Intent(this,MainActivity :: class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
+                var intent = Intent(this,MainActivity :: class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
             .addOnFailureListener {
                 Toast.makeText(this,"Failed to Save User Details",Toast.LENGTH_LONG).show()
@@ -323,25 +333,26 @@ class UserProfile_Pic : AppCompatActivity() {
 
         var db = FirebaseFirestore.getInstance()
         db.collection("FlatUsers")
+            .whereEqualTo("FlatNo",spin_flatvalue)
+            .whereEqualTo("Wing",spin_wingvalue)
             .get()
-            .addOnSuccessListener { documentSnapshot ->
-                val city = documentSnapshot.toObjects(UserSocietyClass::class.java)
-                for (document in city) {
-                    if(document.FlatNo == spin_flatvalue && document.Wing == spin_wingvalue)
-                    {
-                        progressDialog.dismiss()
+            .addOnSuccessListener {
+
+                if(it.isEmpty) {
+                    SaveSocietyToFireBase()
+
+                }else {
+
+                         progressDialog.dismiss()
                         AlertDialog.Builder(this@UserProfile_Pic)
                             .setMessage("User Alreay Exist!! Please Change Your Details")
                             .setPositiveButton("Ok") { dialog, which ->
 
+                                dialog.cancel()
+
                             }
                             .show()
-
-                    }
-                    else{
-                       SaveSocietyToFireBase()
-                    }
-                }
+                 }
             }
 
             .addOnFailureListener { exception ->

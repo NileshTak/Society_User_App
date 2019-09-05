@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     lateinit var mAuth : FirebaseAuth
     var LoggedIn_User_phone: String? = null
-    lateinit var waitReq : ImageView
+  //  lateinit var waitReq : ImageView
+    lateinit var warning_dialog: AlertDialog
 //    lateinit var btnLogout : Button
     var netInfo : NetworkInfo? = null
     lateinit var tvNavTitle : TextView
@@ -66,12 +67,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      //   btnLogout = findViewById<Button>(R.id.btnLogout)
         tvNavTitle = findViewById<TextView>(R.id.tvnavTitle)
         ciNavProfImg = findViewById<CircleImageView>(R.id.navProfImg)
-        waitReq = findViewById<ImageView>(R.id.imgWait)
+     //   waitReq = findViewById<ImageView>(R.id.imgWait)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
         mAuth = FirebaseAuth.getInstance()
         var user = mAuth.currentUser
+
+        val inflater = getLayoutInflater()
+        val alertLayout = inflater.inflate(R.layout.custom_warning_layout, null)
+        val show = AlertDialog.Builder(this@MainActivity)
+        show.setView(alertLayout)
+        show.setCancelable(false)
+        warning_dialog = show.create()
 
         // OneSignal Initialization
         OneSignal.startInit(this)
@@ -208,6 +216,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+    var flag : Boolean = false
+
     private fun disableNav() {
 
         var db = FirebaseFirestore.getInstance()
@@ -221,14 +232,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     if(document!!.userAuth.equals("Pending") || document.userAuth.equals("Rejected"))
                     {
                         frame_container.visibility = View.GONE
-                        waitReq.visibility = View.VISIBLE
+                     //   waitReq.visibility = View.VISIBLE
+
+                      flag = true
+
+                        showDialog()
                         Glide.with(applicationContext).load(document.Profile_Pic_url).into(ciNavProfImg)
                         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                         disableNav()
                     }
                     else{
+                        flag = false
                         frame_container.visibility = View.VISIBLE
-                        waitReq.visibility = View.GONE
+                    //    waitReq.visibility = View.GONE
+                        warning_dialog.dismiss()
                         Glide.with(applicationContext).load(document.Profile_Pic_url).into(ciNavProfImg)
                         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                         disableNav()
@@ -247,6 +264,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
     }
 
+
+
+
+    private fun showDialog()
+    {
+        if (flag == true)
+        {
+
+            warning_dialog.show()
+        }
+
+    }
 
 
     private fun fetchUserDataNAV() {

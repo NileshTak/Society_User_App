@@ -103,7 +103,7 @@ class Authentication : AppCompatActivity() {
 
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(Credential: PhoneAuthCredential) {
-                Toast.makeText(applicationContext,"Verfication Process",Toast.LENGTH_SHORT).show()
+        //        Toast.makeText(applicationContext,"Verfication Process",Toast.LENGTH_SHORT).show()
                     val inflater = getLayoutInflater()
                     val alertLayout = inflater.inflate(R.layout.processing_dialog, null)
                     val show = AlertDialog.Builder(this@Authentication)

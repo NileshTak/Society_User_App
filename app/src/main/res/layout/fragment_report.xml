@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="4dp"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ReportFrag">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_margin="5dp"
-        android:id="@+id/recyclerview_xml_reportfrag"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:padding="5dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.recyclerview.widget.RecyclerView>
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="4dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ReportFrag">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayoutReportFrag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
 
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_margin="5dp"
+                android:id="@+id/recyclerview_xml_reportfrag"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

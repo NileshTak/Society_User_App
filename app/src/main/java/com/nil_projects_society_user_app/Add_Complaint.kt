@@ -63,7 +63,7 @@ class Add_Complaint : AppCompatActivity() {
             var uri = bundle!!.getString("ImageUri")
             imageUri = uri.toUri()
             Log.d("CameraUri",imageUri.toString())
-            Toast.makeText(this@Add_Complaint,imageUri.toString(),Toast.LENGTH_LONG).show()
+         //   Toast.makeText(this@Add_Complaint,imageUri.toString(),Toast.LENGTH_LONG).show()
             Glide.with(this@Add_Complaint).load(imageUri).into(img_select_camera)
 
             compress(imageUri!!)
@@ -169,7 +169,7 @@ class Add_Complaint : AppCompatActivity() {
                             )
                             sendFCMtoUsers()
                         }.addOnFailureListener {
-                                exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+                  //              exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
                         }
                 }
             }
@@ -207,11 +207,11 @@ class Add_Complaint : AppCompatActivity() {
                             con.setDoInput(true)
 
                             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-                            con.setRequestProperty("Authorization", "Basic Y2Q3ODRhYTUtMjA4ZC00NTZjLTg3MDktMzEwNjJkOWMwMTRi")
+                            con.setRequestProperty("Authorization", "Basic ZDY0NjllYzYtOTgyZS00YTA0LWFlYWQtNmE3Y2Q0MWNhYWNi")
                             con.setRequestMethod("POST")
 
                             val strJsonBody = ("{"
-                                    + "\"app_id\": \"69734071-08a8-4d63-a7ab-adda8e2197f0\","
+                                    + "\"app_id\": \"76c98e53-d3e6-455c-9517-59cca14aed22\","
 
                                     + "\"filters\": [{\"field\": \"tag\", \"key\": \"NotificationID\", \"relation\": \"=\", \"value\": \"" + sendNotificationID + "\"}],"
 
@@ -263,7 +263,7 @@ class Add_Complaint : AppCompatActivity() {
 
         ref.putFile(FinalUri!!)
             .addOnSuccessListener {
-                Toast.makeText(applicationContext,"Image Uploaded",Toast.LENGTH_LONG).show()
+          //      Toast.makeText(applicationContext,"Image Uploaded",Toast.LENGTH_LONG).show()
                 Log.d("SocietyLogs","Image uploaded")
                 ref.downloadUrl.addOnSuccessListener {
                     it.toString()

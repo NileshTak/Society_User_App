@@ -1,21 +1,14 @@
 package com.nil_projects_society_user_app
 
-import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
@@ -32,12 +25,10 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
-import com.xwray.groupie.OnItemLongClickListener
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.custom_layout_last.view.*
 import kotlinx.android.synthetic.main.custom_layout_middle.view.*
 import kotlinx.android.synthetic.main.custom_layout_workerhome.view.*
-import org.w3c.dom.Text
 import java.util.ArrayList
 
 
@@ -51,7 +42,7 @@ class HomeFrag : Fragment() {
     lateinit var tvSocietyNotice : TextView
     lateinit var tvBuildingNotice : TextView
     lateinit var tvWorker : TextView
-    var currentUserWing : String = ""
+
     lateinit var progressDialog: ProgressDialog
 
 
@@ -76,7 +67,7 @@ class HomeFrag : Fragment() {
 
         fetchCurrentUserData()
         fetchSliderImages()
-        fetchRecords()
+
         fetchNotifications()
         fetchWorkers()
 
@@ -95,7 +86,8 @@ class HomeFrag : Fragment() {
                 documentSnapshot.documents.forEach {
                     val city = it.toObject(UserSocietyClass::class.java)
                     if (city != null) {
-                        currentUserWing = city.Wing
+                       var currentUserWing = city.Wing
+                        fetchRecords(currentUserWing)
                     }
                 }
             }
@@ -118,11 +110,17 @@ class HomeFrag : Fragment() {
                     arr.add(city.Img2)
                     arr.add(city.Img3)
                     arr.add(city.Img4)
-                    arr.add(city.Img5)
+
+//                    arr.add("https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/UiHome%2FIMG-20190904-WA0011.jpg?alt=media&token=eefdf03a-177d-4c36-9736-aa4652782cc4")
+//                    arr.add("https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/UiHome%2FIMG-20190904-WA00i.jpg?alt=media&token=a05f5025-69f7-4e9a-a77b-a3f93f62f508")
+//                    arr.add("https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/UiHome%2FIMG-20190904-WA0013.jpg?alt=media&token=23d381ba-e708-4582-8c78-7f4211ac95ff")
+//                    arr.add("https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/UiHome%2Fsymbol.png?alt=media&token=f406e1a8-b70e-48bf-abeb-473d1073aa6a")
+
 
                     val adapter = SliderAdapterExample(activity!!.applicationContext,arr)
                     sliderView.startAutoCycle()
                     sliderView.sliderAdapter = adapter
+
                     progressDialog.dismiss()
 
 
@@ -142,16 +140,14 @@ class HomeFrag : Fragment() {
             }
     }
 
-    private fun fetchRecords() {
-
-
+    private fun fetchRecords(currentUserWing: String) {
 
         val adapter = GroupAdapter<ViewHolder>()
 
         var db = FirebaseFirestore.getInstance()
 
         db.collection("Records")
-
+            .whereEqualTo("wing",  currentUserWing)
             .orderBy("counter", Query.Direction.DESCENDING)
 
             .get()
@@ -161,7 +157,7 @@ class HomeFrag : Fragment() {
                     val record = it.toObject(reportModelClass::class.java)
 
 
-                    if (record != null && record.wing == currentUserWing) {
+                    if (record != null ) {
                         tvBuildingNotice.visibility = View.VISIBLE
                         adapter.add(FetchRecordItemHome(record))
                     }
@@ -214,6 +210,8 @@ class HomeFrag : Fragment() {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalrecord.imageUrl.toUri()
                 int.putExtra("msg",Finalrecord.date)
+                int.putExtra("id",Finalrecord.id)
+                int.putExtra("collectionName","Records")
                 startActivity(int)
             }
         }
@@ -291,6 +289,8 @@ class HomeFrag : Fragment() {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalnotifi.imageUrl.toUri()
                 int.putExtra("msg",Finalnotifi.noti)
+                int.putExtra("id",Finalnotifi.id)
+                int.putExtra("collectionName","Notifications")
                 startActivity(int)
             }
         }

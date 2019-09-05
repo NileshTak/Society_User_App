@@ -138,36 +138,42 @@ class Maintainance_Records : Fragment() {
     private fun addItem(title: String, subItems: Array<String>,flatNo : String,wingname : String,
                         Amount : String,Fine : String,
                         colorRes: Int, iconRes: Int)
-    {    //Let's create an item with R.layout.expanding_layout
-        val item = mExpandingList!!.createNewItem(R.layout.expanding_layout)
-
-        //If item creation is successful, let's configure it
-        if (item != null) {
-            item.setIndicatorColorRes(colorRes)
-            item.setIndicatorIconRes(iconRes)
-            //It is possible to get any view inside the inflated layout. Let's set the text in the item
-            (item.findViewById(R.id.title) as TextView).text = title
-            (item.findViewById(R.id.custom_flatno) as TextView).text = flatNo
-            (item.findViewById(R.id.custom_societyname) as TextView).text = wingname
-            if(Amount.isNotEmpty() && Fine.isNotEmpty())
-            {
-                (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount+$Fine"
-            }
-            else
-            {
-                (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount"
-            }
 
 
-            //We can create items in batch.
-            item.createSubItems(subItems.size)
-            for (i in 0 until item.subItemsCount) {
-                //Let's get the created sub item by its index
-                val view = item.getSubItemView(i)
+    {
 
-                //Let's set some values in
-                configureSubItem(item, view, subItems[i])
-            }
+        if (Amount.isNotEmpty())
+        {
+            //Let's create an item with R.layout.expanding_layout
+            val item = mExpandingList!!.createNewItem(R.layout.expanding_layout)
+
+            //If item creation is successful, let's configure it
+            if (item != null) {
+                item.setIndicatorColorRes(colorRes)
+                item.setIndicatorIconRes(iconRes)
+                //It is possible to get any view inside the inflated layout. Let's set the text in the item
+                (item.findViewById(R.id.title) as TextView).text = title
+                (item.findViewById(R.id.custom_flatno) as TextView).text = flatNo
+                (item.findViewById(R.id.custom_societyname) as TextView).text = wingname
+                if(Amount.isNotEmpty() && Fine.isNotEmpty())
+                {
+                    (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount+$Fine"
+                }
+                else
+                {
+                    (item.findViewById(R.id.tvAmountFine) as TextView).text = "$Amount"
+                }
+
+
+                //We can create items in batch.
+                item.createSubItems(subItems.size)
+                for (i in 0 until item.subItemsCount) {
+                    //Let's get the created sub item by its index
+                    val view = item.getSubItemView(i)
+
+                    //Let's set some values in
+                    configureSubItem(item, view, subItems[i])
+                }
 
 //            item.findViewById<ImageView>(R.id.add_more_sub_items).setOnClickListener(View.OnClickListener {
 //                showInsertDialog(object : OnItemCreated {
@@ -180,7 +186,9 @@ class Maintainance_Records : Fragment() {
 
 //            item.findViewById<ImageView>(R.id.remove_item)
 //                    .setOnClickListener(View.OnClickListener { mExpandingList!!.removeItem(item) })
+            }
         }
+
     }
 
     private fun configureSubItem(item: ExpandingItem?, view: View, subTitle: String) {

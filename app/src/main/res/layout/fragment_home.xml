@@ -5,7 +5,6 @@
               android:layout_height="match_parent"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-              android:layout_marginBottom="20dp"
               tools:context=".HomeFrag">
 
     <androidx.core.widget.NestedScrollView
@@ -95,6 +94,7 @@
                     android:layout_below="@+id/vf"
                     android:orientation="horizontal"
                     android:layout_marginTop="-3dp"
+                    android:layout_marginBottom="10dp"
                     android:id="@+id/first_recycler"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_width="match_parent"
