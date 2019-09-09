@@ -3,6 +3,8 @@ package com.nil_projects_society_user_app
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -25,6 +27,7 @@ import kotlinx.android.synthetic.main.processing_dialog.view.*
 import kotlinx.android.synthetic.main.profile_create_dialog.view.*
 import org.w3c.dom.Text
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -91,6 +94,15 @@ class Authentication : AppCompatActivity() {
         stepView.setStepsNumber(3)
         stepView.go(0, true)
         layout1.visibility = View.VISIBLE
+
+
+        Timer().scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                noInt()
+            }
+        },0,5000)
+
+
 
         sendCodeButton!!.setOnClickListener {
             sendCode()
@@ -176,6 +188,25 @@ class Authentication : AppCompatActivity() {
             }, 5000)
         }
     }
+
+
+    private fun noInt() {
+        var netInfo : NetworkInfo? = null
+        val cm = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        netInfo = cm.activeNetworkInfo
+
+        if(netInfo == null)
+        {
+            Alerter.create(this@Authentication)
+                .setTitle("No Internet Connnection")
+                .setIcon(R.drawable.noint)
+                .setText("Please make sure your device is connected to Internet!!")
+                .setBackgroundColorRes(R.color.colorAccent)
+                .show()
+        }
+    }
+
+
 
     private fun checkUserAlreadyExistes() {
         val db = FirebaseFirestore.getInstance()

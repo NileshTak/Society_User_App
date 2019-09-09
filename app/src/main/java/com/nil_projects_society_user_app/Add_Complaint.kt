@@ -207,11 +207,11 @@ class Add_Complaint : AppCompatActivity() {
                             con.setDoInput(true)
 
                             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-                            con.setRequestProperty("Authorization", "Basic ZDY0NjllYzYtOTgyZS00YTA0LWFlYWQtNmE3Y2Q0MWNhYWNi")
+                            con.setRequestProperty("Authorization", "Basic NzY1N2E5MGEtM2JjZi00MWU3LTg5ZjYtNjg5Y2Y4Nzg2ZTk0")
                             con.setRequestMethod("POST")
 
                             val strJsonBody = ("{"
-                                    + "\"app_id\": \"76c98e53-d3e6-455c-9517-59cca14aed22\","
+                                    + "\"app_id\": \"1a84ca5e-eedd-4f38-9475-8e8c0e78bdfd\","
 
                                     + "\"filters\": [{\"field\": \"tag\", \"key\": \"NotificationID\", \"relation\": \"=\", \"value\": \"" + sendNotificationID + "\"}],"
 
