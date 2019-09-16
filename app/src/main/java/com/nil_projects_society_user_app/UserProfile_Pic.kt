@@ -166,7 +166,7 @@ class UserProfile_Pic : AppCompatActivity() {
                                             "Row House" -> {
                                                 spinner_flat.visibility = View.VISIBLE
                                                 val optionsFlat = listOf<String>("Select Row House", "1","2","3","4","5","6","7","8","9","10",
-                                                    "11","12")
+                                                    "11","12","111")
 
                                                 flatPassData(optionsFlat,optionsWing.get(position))
                                             }
@@ -192,7 +192,7 @@ class UserProfile_Pic : AppCompatActivity() {
                                                 val optionsFlat = listOf<String>("Select Flat", "101","102","103","104","105","106","107","108",
                                                     "201","202","203","204","205","206","207","208","303","304","305","306","307","308","401","402","403","404",
                                                     "405","406","407","408",
-                                                    "501","502","503","504","507","508","601","602","607","608",
+                                                    "501","502","503","504","506","507","508","601","602","607","608",
                                                     "301/302","505/508","603/604","605/606")
 
                                                 flatPassData(optionsFlat,optionsWing.get(position))

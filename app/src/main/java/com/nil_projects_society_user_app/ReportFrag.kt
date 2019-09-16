@@ -249,7 +249,7 @@ class FetchRecordItem(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Picasso.get().load(Finalrecord.imageUrl).into(viewHolder.itemView.record_img_xml)
         Glide.with(record_img_xml.context).load(Finalrecord.imageUrl).into( record_img_xml)
 
-        record_img_xml.setOnClickListener {
+        itemView.setOnClickListener {
             var int = Intent(record_img_xml.context,FUllScreenImage :: class.java)
             int.data = Finalrecord.imageUrl.toUri()
             int.putExtra("msg",Finalrecord.date)

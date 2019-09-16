@@ -194,8 +194,8 @@ class Add_Complaint : AppCompatActivity() {
                 StrictMode.setThreadPolicy(policy)
                 var sendNotificationID: String
                 //This is a Simple Logic to Send Notification different Device Programmatically....
-                        sendNotificationID = "admin@gmail.com"
-                        Log.d("OneSignal App",sendNotificationID)
+                        sendNotificationID = "manassociety2006@gmail.com"
+                        Log.d("OneSignal App",sendNotificationID )
 
                         try {
                             val jsonResponse: String

@@ -131,10 +131,8 @@ class Authentication : AppCompatActivity() {
                 Log.d("Failure",e.toString())
             }
 
-            override fun onCodeSent(
-                verificationId: String?,
-                token: PhoneAuthProvider.ForceResendingToken?
-            ) {
+            override fun onCodeSent(verificationId: String ,
+                                    token: PhoneAuthProvider.ForceResendingToken ) {
 
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId
