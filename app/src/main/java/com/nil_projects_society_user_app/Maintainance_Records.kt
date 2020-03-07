@@ -96,7 +96,7 @@ class Maintainance_Records : Fragment() {
 //        var wingname : String
 //
 //        db.collection("FlatUsers")
-//                .whereEqualTo("SocietyName", "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
+//                .whereEqualTo("SocietyName", "SMART HOUSING SOCIETY")
 //                .get()
 //                .addOnSuccessListener { documentSnapshot ->
 //                    documentSnapshot.documents.forEach {

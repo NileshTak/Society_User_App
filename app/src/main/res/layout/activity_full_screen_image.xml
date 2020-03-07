@@ -27,22 +27,46 @@
             android:layout_alignParentRight="true"
             android:layout_height="45dp" />
 
+
+
+    <TextView
+            android:id="@+id/tvPostedBy"
+            android:textSize="20dp"
+            android:layout_below="@+id/ivDownload"
+            android:layout_margin="10sp"
+
+            android:textColor="@color/md_white_1000"
+            android:gravity="center_horizontal"
+
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+    <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/fullscreen_image"
+            android:layout_width="match_parent"
+            android:layout_below="@id/tvPostedBy"
+
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content">
+    </com.github.chrisbanes.photoview.PhotoView>
+
+
+
     <TextView
             android:id="@+id/tvFullPic"
             android:textSize="20dp"
+            android:layout_below="@+id/fullscreen_image"
             android:textColor="@color/md_white_1000"
             android:gravity="center_horizontal"
-             android:layout_alignParentBottom="true"
+
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-    <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/fullscreen_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    </com.github.chrisbanes.photoview.PhotoView>
 
 </RelativeLayout>

@@ -83,7 +83,7 @@ class UserProfile_Pic : AppCompatActivity() {
                 {
                     spinner_societyname.visibility = View.VISIBLE
 
-                    val optionsSocietyName = arrayOf("Select Society", "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
+                    val optionsSocietyName = arrayOf("Select Society", "SMART HOUSING SOCIETY")
 
                     spinner_societyname.adapter = ArrayAdapter<String>(this@UserProfile_Pic,R.layout.spinner_item,optionsSocietyName)
                     spinner_societyname.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -93,7 +93,7 @@ class UserProfile_Pic : AppCompatActivity() {
 
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //            Toast.makeText(this@UserProfile_Pic,"Selected Society is : "+optionsSocietyName.get(position), Toast.LENGTH_LONG).show()
-                            if(optionsSocietyName.get(position) == "SIDDHIVINAYAK MANAS CO-OP. HOUSING SOCIETY")
+                            if(optionsSocietyName.get(position) == "SMART HOUSING SOCIETY")
                             {
                                 spinner_buildingwing.visibility = View.VISIBLE
 

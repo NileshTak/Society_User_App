@@ -23,8 +23,6 @@
                     android:layout_marginTop="5dp"
                     android:layout_height="150dp"
 
-
-                 android:foreground="@drawable/profile"
                     android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_select_photo_button"/>
 
@@ -34,6 +32,7 @@
                     android:layout_width="150dp"
                     android:layout_margin="10dp"
                     android:layout_marginTop="5dp"
+                    android:src="@drawable/user"
                     android:layout_height="150dp"
                     app:civ_border_color="@android:color/black"
                     android:layout_centerHorizontal="true"

@@ -147,7 +147,7 @@ class HomeFrag : Fragment() {
         var db = FirebaseFirestore.getInstance()
 
         db.collection("Records")
-            .whereEqualTo("wing",  currentUserWing)
+            .whereEqualTo("wing",currentUserWing)
             .orderBy("counter", Query.Direction.DESCENDING)
 
             .get()
@@ -157,7 +157,7 @@ class HomeFrag : Fragment() {
                     val record = it.toObject(reportModelClass::class.java)
 
 
-                    if (record != null ) {
+                    if (record != null) {
                         tvBuildingNotice.visibility = View.VISIBLE
                         adapter.add(FetchRecordItemHome(record))
                     }
@@ -168,32 +168,6 @@ class HomeFrag : Fragment() {
                 first_recycler.adapter = adapter
             }
 
-
-//        val adapter = GroupAdapter<ViewHolder>()
-//
-//        val ref = FirebaseDatabase.getInstance().getReference("/RecordsDates")
-//        var recordsorder = ref.orderByChild("counter")
-//        ref.addListenerForSingleValueEvent(object : ValueEventListener
-//        {
-//            override fun onCancelled(p0: DatabaseError) {
-//
-//            }
-//
-//            override fun onDataChange(p0: DataSnapshot) {
-//                p0.children.forEach {
-//                    recordsorder
-//                    val record = it.getValue(RecordClass::class.java)
-//
-//                    if (record != null) {
-//                        tvBuildingNotice.visibility = View.VISIBLE
-//                        adapter.add(FetchRecordItemHome(record))
-//                    }
-//                }
-//
-//
-//                first_recycler.adapter = adapter
-//            }
-//        })
     }
 
     inner class FetchRecordItemHome(var Finalrecord : reportModelClass) : Item<ViewHolder>()
@@ -209,9 +183,10 @@ class HomeFrag : Fragment() {
             viewHolder.itemView.setOnClickListener {
                 var int = Intent(activity,FUllScreenImage :: class.java)
                 int.data = Finalrecord.imageUrl.toUri()
-                int.putExtra("msg",Finalrecord.date)
+                int.putExtra("msg",Finalrecord.buildingnotice)
                 int.putExtra("id",Finalrecord.id)
                 int.putExtra("collectionName","Records")
+                int.putExtra("userid",Finalrecord.userid)
                 startActivity(int)
             }
         }

@@ -5,6 +5,7 @@
     <item
             android:id="@+id/view_prof"
             app:showAsAction="ifRoom"
+            android:icon="@drawable/user_000"
             android:title=""/>
 
 </menu>

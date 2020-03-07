@@ -180,7 +180,16 @@ class EditProf : AppCompatActivity() {
                 for (documentSnapshot in queryDocumentSnapshots) {
                     val note = documentSnapshot.toObject<UserSocietyClass>(UserSocietyClass::class.java)
                     //Picasso.get().load(note.Profile_Pic_url).into(selectphoto_imageview_register)
-                    Glide.with(this).load(note.Profile_Pic_url).into(selectphoto_imageview_register)
+
+                    if (note.Profile_Pic_url != "https://firebasestorage.googleapis.com/v0/b/notifyapp-58ee3.appspot.com/o/ProfPics%2Fuser_000.png?alt=media&token=f9437bc5-1e64-4755-9116-1cc1b2887b51")
+                    {
+                        Glide.with(this).load(note.Profile_Pic_url).into(selectphoto_imageview_register)
+                    }
+                    else
+                    {
+                        Glide.with(this).load(R.drawable.user).into(selectphoto_imageview_register)
+
+                    }
                     btn_selectphoto_imageview_register.alpha = 0f
                     name_title.text = note.UserName
                     edRelation.text = note.UserRelation

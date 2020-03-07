@@ -9,18 +9,25 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class FUllScreenImage : AppCompatActivity() {
 
     lateinit var fullscreenimg : PhotoView
     lateinit var ivBackArrow : Button
-    lateinit var tvMsg : TextView
     lateinit var ivDownload : Button
+    lateinit var tvMsg : TextView
+    lateinit var collectionName : String
     lateinit var imgUri : Uri
+    lateinit var id : String
+    lateinit var tvPostedBy : TextView
+    lateinit var userid : String
+ //   lateinit var ivDltImage : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +35,10 @@ class FUllScreenImage : AppCompatActivity() {
 
         ivBackArrow = findViewById<Button>(R.id.ivBackArrow)
         tvMsg = findViewById<TextView>(R.id.tvFullPic)
-        fullscreenimg = findViewById<View>(R.id.fullscreen_image) as PhotoView
+    //    ivDltImage = findViewById<Button>(R.id.ivDltImage)
+        tvPostedBy = findViewById<TextView>(R.id.tvPostedBy)
         ivDownload = findViewById<Button>(R.id.ivDownload)
+        fullscreenimg = findViewById<View>(R.id.fullscreen_image) as PhotoView
 
         val window = this.getWindow()
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -40,13 +49,20 @@ class FUllScreenImage : AppCompatActivity() {
             onBackPressed()
         }
 
+
+
         val bundle: Bundle? = intent.extras
 
         bundle?.let {
             val msg = bundle.getString("msg")
-            if(msg.isNotEmpty())
+            id = bundle.getString("id")
+            collectionName = bundle.getString("collectionName")
+            userid = bundle.getString("userid")
+            if(msg.isNotEmpty() && id.isNotEmpty() && userid.isNotEmpty())
             {
                 tvMsg.text = msg
+                tvPostedBy.text = " Posted By : "+userid
+
             }
         }
 
@@ -60,14 +76,31 @@ class FUllScreenImage : AppCompatActivity() {
             }
         }
 
+//        ivDltImage.setOnClickListener {
+//
+//            var db = FirebaseFirestore.getInstance()
+//            db.collection(collectionName).document( id )
+//                .delete()
+//                .addOnSuccessListener { Toast.makeText(this,"Successfully Deleted", Toast.LENGTH_LONG).show()
+//                    onBackPressed()
+//                }
+//                .addOnFailureListener { e -> Toast.makeText(this,"Network Error", Toast.LENGTH_LONG).show() }
+//
+//
+//        }
+
         ivDownload.setOnClickListener {
             var dm = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             if(imgUri != null)
             {
                 var request = DownloadManager.Request(imgUri)
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        //        request.setDestinationInExternalFilesDir(this,DestinationDirectryLocation,filename+fileextension)
+                //        request.setDestinationInExternalFilesDir(this,DestinationDirectryLocation,filename+fileextension)
                 dm.enqueue(request)
+            }
+            else
+            {
+                Toast.makeText(this,"No Image Found to Download",Toast.LENGTH_LONG).show()
             }
         }
     }
